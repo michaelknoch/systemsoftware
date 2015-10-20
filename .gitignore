@@ -1,0 +1,4 @@
+linux-4.2.3.tar.xz
+V1/linux-4.2.3/*
+!V1/linux-4.2.3/.config
+*.swp
