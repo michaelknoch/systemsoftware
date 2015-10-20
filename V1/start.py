@@ -31,6 +31,7 @@ def init():
 	else:
 		print('file already exists')
 
+	# TODO check if linux-4.2.3/ already exists
 	os.system('tar xfv linux-4.2.3.tar.xz')
 	print('extract Success')
 
@@ -40,21 +41,20 @@ def init():
 		os.system('cd linux-4.2.3 && make ARCH=i386 menuconfig')
 
 def copyConfigFile(into=False):
-	# into True copy config file from current directory
+	# if into True copy config file from current directory into linux-4.2.3
 	# otherwise from linux-4.2.3 to current directory
+	_from = originConfigPath
+	_to = destConfigPath
 
-	if into is True:
-		if not os.path.isfile(originConfigPath):
-			print 'error opening ' + originConfigPath + ' file'
-			sys.exit(2)
-		print 'cp ' + originConfigPath + ' ' + destConfigPath
-		os.system('cp ' + originConfigPath + ' ' + destConfigPath)
-	else:
-		if not os.path.isfile(destConfigPath):
-			print 'error opening ' + destConfigPath + ' file'
-			sys.exit(2)
-		print 'cp ' + destConfigPath + ' ' + originConfigPath
-		os.system('cp ' + destConfigPath + ' ' + originConfigPath)
+	if into is False:
+		_from = destConfigPath
+		_to = originConfigPath
+	
+	if not os.path.isfile(_from):
+		print 'error opening ' + _from + ' file'
+		sys.exit(2)
+	print 'cp ' + _from + ' ' + _to
+	os.system('cp ' + _from + ' ' + _to)
 		
 
 def main(argv):
