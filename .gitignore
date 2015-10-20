@@ -1,6 +1,6 @@
 linux-4.2.3.tar.xz
 V1/linux-4.2.3/*
-!V1/linux-4.2.3/.config
 *.swp
 V1/initfs/
 V1/initramfs_data.cpio.gz
+linux-4.2.3.tar.xz
