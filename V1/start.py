@@ -35,12 +35,18 @@ def init():
 		os.system('cd linux-4.2.3 && make ARCH=i386 allnoconfig')
 		os.system('cd linux-4.2.3 && make ARCH=i386 menuconfig')
 
-def copyConfigFile():
-	if not os.path.isfile('../.config'):
-		print 'error opening .config file'
-		sys.exit(2)
-	os.system('cp ../.config ./.config')
-
+def copyConfigFile(into=False):
+	if into:
+		if not os.path.isfile('./.config'):
+			print 'error opening .config file'
+			sys.exit(2)
+		os.system('cp ./.config ./linux-4.2.3/.config')
+	else:
+		if not os.path.isfile('./linux-4.2.3/.config'):
+			print 'error opening .config file'
+			sys.exit(2)
+		os.system('cp ./linux-4.2.3/.config ./.config')
+		
 
 def main(argv):
 	try:
