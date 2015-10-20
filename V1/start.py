@@ -42,7 +42,7 @@ def init():
 def copyConfigFile(into=False):
 	if into is True:
 		if not os.path.isfile(originConfigPath):
-			print 'error opening ' + originConfigPath + 'file'
+			print 'error opening ' + originConfigPath + ' file'
 			sys.exit(2)
 		print 'cp ' + originConfigPath + ' ' + destConfigPath
 		os.system('cp ' + originConfigPath + ' ' + destConfigPath)
