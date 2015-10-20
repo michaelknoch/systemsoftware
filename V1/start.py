@@ -40,6 +40,9 @@ def init():
 		os.system('cd linux-4.2.3 && make ARCH=i386 menuconfig')
 
 def copyConfigFile(into=False):
+	# into True copy config file from current directory
+	# otherwise from linux-4.2.3 to current directory
+
 	if into is True:
 		if not os.path.isfile(originConfigPath):
 			print 'error opening ' + originConfigPath + ' file'
