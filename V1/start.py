@@ -17,6 +17,10 @@ import getopt
 
 config = False
 
+destConfigPath = './linux-4.2.3/.config'
+originConfigPath = './.config'
+
+
 def init():
 	print('Script started...')
 	# download and extract kernel
@@ -36,19 +40,23 @@ def init():
 		os.system('cd linux-4.2.3 && make ARCH=i386 menuconfig')
 
 def copyConfigFile(into=False):
-	if into:
-		if not os.path.isfile('./.config'):
-			print 'error opening .config file'
+	if into is True:
+		if not os.path.isfile(originConfigPath):
+			print 'error opening ' + originConfigPath + 'file'
 			sys.exit(2)
-		os.system('cp ./.config ./linux-4.2.3/.config')
+		print 'cp ' + originConfigPath + ' ' + destConfigPath
+		os.system('cp ' + originConfigPath + ' ' + destConfigPath)
 	else:
-		if not os.path.isfile('./linux-4.2.3/.config'):
-			print 'error opening .config file'
+		if not os.path.isfile(destConfigPath):
+			print 'error opening ' + destConfigPath + ' file'
 			sys.exit(2)
-		os.system('cp ./linux-4.2.3/.config ./.config')
+		print 'cp ' + destConfigPath + ' ' + originConfigPath
+		os.system('cp ' + destConfigPath + ' ' + originConfigPath)
 		
 
 def main(argv):
+	copyConfigFile(True)
+	return
 	try:
 		opts, args = getopt.getopt(argv,"c", ["config"])
 	except getopt.GetoptError:
