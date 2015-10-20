@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # coding: utf8
 
 #============================================================================
@@ -20,6 +20,19 @@ config = False
 destConfigPath = './linux-4.2.3/.config'
 originConfigPath = './.config'
 
+def initFs():
+	
+	os.system('rm rf initfs')
+	os.makedirs('initfs/dev')
+	os.makedirs('initfs/bin')
+	os.makedirs('initfs/sbin')
+	os.makedirs('initfs/etc')
+	os.makedirs('initfs/tmp')
+	os.makedirs('initfs/var')
+	os.makedirs('initfs/usr/bin')
+	os.system('cp hello.sh initfs/init')
+	os.system('cd initfs && find . | cpio -o -H newc | gzip > ../initramfs_data.cpio.gz')
+	os.system('rm -rf initfs')
 
 def init():
 	print('Script started...')
@@ -68,6 +81,10 @@ def main(argv):
 			config = True
 			print 'new config'
 	
+
+	initFs()
+	return
+
 	print 'start default'
 	init()
 	sys.exit(0)			
