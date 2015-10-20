@@ -58,8 +58,6 @@ def copyConfigFile(into=False):
 		
 
 def main(argv):
-	copyConfigFile(True)
-	return
 	try:
 		opts, args = getopt.getopt(argv,"c", ["config"])
 	except getopt.GetoptError:
