@@ -25,3 +25,9 @@ else:
 
 os.system('tar xfv linux-4.2.3.tar.xz')
 print('extract Success')
+
+# run allnoconfig & menuconfig when .config is not present
+if not os.path.isfile('linux-4.2.3/.config')
+	os.system('cd linux-4.2.3 && make ARCH=i386 allnoconfig')
+	os.system('cd linux-4.2.3 && make ARCH=i386 menuconfig')
+
