@@ -35,16 +35,22 @@ def init():
 		os.system('cd linux-4.2.3 && make ARCH=i386 allnoconfig')
 		os.system('cd linux-4.2.3 && make ARCH=i386 menuconfig')
 
+def copyConfigFile():
+	if not os.path.isfile('../.config'):
+		print 'error opening .config file'
+		sys.exit(2)
+	os.system('cp ../.config ./.config')
+
 
 def main(argv):
 	try:
 		opts, args = getopt.getopt(argv,"c", ["config"])
-   	except getopt.GetoptError:
-      		print 'argument parse error'
-      		sys.exit(2)
-   	for opt, arg in opts:
-      		if opt in ("-c", "--config"):
-         		config = True
+	except getopt.GetoptError:
+		print 'argument parse error'
+		sys.exit(2)
+	for opt, arg in opts:
+		if opt in ("-c", "--config"):
+			config = True
 			print 'new config'
 	
 	print 'start default'
