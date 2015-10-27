@@ -22,7 +22,7 @@ originConfigPath = './.config'
 
 def initFs():
 	
-	os.system('rm rf initfs')
+	os.system('rm -rf ./initfs')
 	os.makedirs('initfs/dev')
 	os.makedirs('initfs/bin')
 	os.makedirs('initfs/sbin')
@@ -30,9 +30,9 @@ def initFs():
 	os.makedirs('initfs/tmp')
 	os.makedirs('initfs/var')
 	os.makedirs('initfs/usr/bin')
-	os.system('cp hello.sh initfs/init')
+	os.system('cp hello initfs/init')
 	os.system('cd initfs && find . | cpio -o -H newc | gzip > ../initramfs_data.cpio.gz')
-	os.system('rm -rf initfs')
+	#os.system('rm -rf ./initfs')
 
 def init():
 	print('Script started...')
@@ -57,6 +57,10 @@ def makeConfig():
 
 def build():
 	os.system('cd linux-4.2.3 && make ARCH=i386 -j4')
+
+
+def runQemu():
+	os.system('qemu-system-i386 -kernel linux-4.2.3/arch/x86/boot/bzImage -nographic -append "console=ttyS0" -initrd ./initramfs_data.cpio.gz')
 
 def copyConfigFile(into=False):
 	# if into True copy config file from current directory into linux-4.2.3
@@ -88,9 +92,12 @@ def main(argv):
 		else:
 			print 'running default'
 
+
 	init()
+	initFs()
 	copyConfigFile(True)
 	build()
+	runQemu()
 
 	
 
