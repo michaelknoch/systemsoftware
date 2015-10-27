@@ -22,7 +22,12 @@ originConfigPath = './.config'
 
 def initFs():
 	
+
 	os.system('rm -rf ./initfs')
+	os.system('rm -rf ./initramfs_data.cpio.gz')
+
+	os.system('gcc -static -m32 helloo.c -o hello')
+
 	os.makedirs('initfs/dev')
 	os.makedirs('initfs/bin')
 	os.makedirs('initfs/sbin')
@@ -31,6 +36,7 @@ def initFs():
 	os.makedirs('initfs/var')
 	os.makedirs('initfs/usr/bin')
 	os.system('cp hello initfs/init')
+	os.system('find ./initfs -type f -exec chmod 777 {} \;')
 	os.system('cd initfs && find . | cpio -o -H newc | gzip > ../initramfs_data.cpio.gz')
 	#os.system('rm -rf ./initfs')
 
@@ -45,8 +51,9 @@ def init():
 		print('file already exists')
 
 	# TODO check if linux-4.2.3/ already exists
-	os.system('tar xfv linux-4.2.3.tar.xz')
-	print('extract Success')
+	if not os.path.exists('linux-4.2.3'):
+		os.system('tar xfv linux-4.2.3.tar.xz')
+		print('extract Success')
 
 
 def makeConfig():
@@ -58,6 +65,8 @@ def makeConfig():
 def build():
 	os.system('cd linux-4.2.3 && make ARCH=i386 -j4')
 
+def copyInitFs():
+	os.system('cp initfs linux-4.2.3/')	
 
 def runQemu():
 	os.system('qemu-system-i386 -kernel linux-4.2.3/arch/x86/boot/bzImage -nographic -append "console=ttyS0" -initrd ./initramfs_data.cpio.gz')
