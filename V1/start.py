@@ -48,10 +48,15 @@ def init():
 	os.system('tar xfv linux-4.2.3.tar.xz')
 	print('extract Success')
 
+
+def makeConfig():
 	# run allnoconfig & menuconfig when .config is not present
 	if config:
 		os.system('cd linux-4.2.3 && make ARCH=i386 allnoconfig')
 		os.system('cd linux-4.2.3 && make ARCH=i386 menuconfig')
+
+def build():
+	os.system('cd linux-4.2.3 && make ARCH=i386 -j4')
 
 def copyConfigFile(into=False):
 	# if into True copy config file from current directory into linux-4.2.3
@@ -80,13 +85,20 @@ def main(argv):
 		if opt in ("-c", "--config"):
 			config = True
 			print 'new config'
+		else:
+			print 'running default'
+
+	init()
+	copyConfigFile(True)
+	build()
+
 	
 
-	initFs()
-	return
+	#initFs()
+	#return
 
-	print 'start default'
-	init()
+	#print 'start default'
+	#init()
 	sys.exit(0)			
 
 if __name__ == "__main__":
