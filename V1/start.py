@@ -26,7 +26,7 @@ def initFs():
 	os.system('rm -rf ./initfs')
 	os.system('rm -rf ./initramfs_data.cpio.gz')
 
-	os.system('gcc -static -m32 helloo.c -o hello')
+	os.system('gcc -static -m32 sysinfo.c -o sysinfo')
 
 	os.makedirs('initfs/dev')
 	os.makedirs('initfs/bin')
@@ -34,11 +34,15 @@ def initFs():
 	os.makedirs('initfs/etc')
 	os.makedirs('initfs/tmp')
 	os.makedirs('initfs/var')
+	os.makedirs('initfs/sys')
+	os.makedirs('initfs/proc')
 	os.makedirs('initfs/usr/bin')
-	os.system('cp hello initfs/init')
+	os.system('cp init.sh initfs/init')
+	os.system('cp sysinfo initfs/bin/sysinfo')
+	os.system('cp busybox initfs/bin/busybox')
 	os.system('find ./initfs -type f -exec chmod 777 {} \;')
 	os.system('cd initfs && find . | cpio -o -H newc | gzip > ../initramfs_data.cpio.gz')
-	#os.system('rm -rf ./initfs')
+	os.system('rm -rf ./initfs')
 
 def init():
 	print('Script started...')
