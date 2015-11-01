@@ -1,3 +1,9 @@
+# Result V1
+
+## Kernel Größe
+
+    -rw-rw---- 1 tiweiss tiweiss 799K Nov  1 15:15 linux-4.2.3/arch/x86/boot/bzImage
+
 ## Config flags (=y)
 
 ```sh
