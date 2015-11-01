@@ -17,9 +17,14 @@ mount -t tmpfs none /tmp
 mount -t sysfs none /sys
 mount -t proc proc /proc
 
+mdev -s
+
+
+# Set loglevel to "Emergency messages, system is about to crash or is unstable"
+echo 0 > /proc/sys/kernel/printk
 
 #feuer frei
 ./bin/sysinfo
 
-
+## shell feuern
 setsid sh
