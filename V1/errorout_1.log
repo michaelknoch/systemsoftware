@@ -1,0 +1,7 @@
+drivers/tty/serial/8250/8250_core.c: In function ‘univ8250_release_irq’:
+drivers/tty/serial/8250/8250_core.c:1834:18: warning: ‘i’ may be used uninitialized in this function [-Wmaybe-uninitialized]
+  if (list_empty(i->head))
+                  ^
+drivers/tty/serial/8250/8250_core.c:1817:19: note: ‘i’ was declared here
+  struct irq_info *i;
+                   ^
