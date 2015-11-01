@@ -1,3 +1,9 @@
+# Result V1
+
+## Kernel Größe
+
+    -rw-rw---- 1 tiweiss tiweiss 799K Nov  1 15:15 linux-4.2.3/arch/x86/boot/bzImage
+
 ## Config flags (=y)
 
 ```sh
@@ -255,3 +261,7 @@ CONFIG_ARCH_HAS_ATOMIC64_DEC_IF_POSITIVE=y
 CONFIG_ARCH_HAS_SG_CHAIN=y
 CONFIG_ARCH_HAS_PMEM_API=y
 ```
+
+## Minimal nötige RAM Größe um System in QEMU zu starten
+
+    20m
