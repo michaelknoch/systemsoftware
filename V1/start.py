@@ -16,6 +16,7 @@ import sys
 import getopt
 
 config = False
+useExistingConfig = False
 
 destConfigPath = './linux-4.2.3/.config'
 originConfigPath = './.config'
@@ -61,9 +62,14 @@ def init():
 
 
 def makeConfig():
+	global config
+	global useExistingConfig
 	# run allnoconfig & menuconfig when .config is not present
 	if config:
-		os.system('cd linux-4.2.3 && make ARCH=i386 allnoconfig')
+		if not useExistingConfig:
+			os.system('cd linux-4.2.3 && make ARCH=i386 allnoconfig')
+		else:
+			copyConfigFile(True)
 		os.system('cd linux-4.2.3 && make ARCH=i386 menuconfig')
 
 def build():
@@ -93,8 +99,10 @@ def copyConfigFile(into=False):
 		
 
 def main(argv):
+	global config
+	global useExistingConfig
 	try:
-		opts, args = getopt.getopt(argv,"c", ["config"])
+		opts, args = getopt.getopt(argv,"ce", ["config", "existingconfig"])
 	except getopt.GetoptError:
 		print 'argument parse error'
 		sys.exit(2)
@@ -102,15 +110,20 @@ def main(argv):
 		if opt in ("-c", "--config"):
 			config = True
 			print 'new config'
+		elif opt in ("-e", "--existingconfig"):
+			config = True
+			useExistingConfig = True
 		else:
 			print 'running default'
 
-
-	init()
-	initFs()
-	copyConfigFile(True)
-	build()
-	runQemu()
+	if config is True:
+		makeConfig()
+	else:
+		init()
+		initFs()
+		copyConfigFile(True)
+		build()
+		runQemu()
 
 	
 
