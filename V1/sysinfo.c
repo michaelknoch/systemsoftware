@@ -7,6 +7,12 @@
 int main(void)
 {
 	struct sysinfo sys;
+	
+	if (sysinfo(&sys) != 0) {
+		fprintf( stderr, "Hoppla!" );
+		return 1;
+	}
+
 	printf("Hello User world:\n");
 	printf("Uptime: %ld\n", sys.uptime);
 	printf("Total RAM: %lu MB\n", sys.totalram / 1024 / 1024);
