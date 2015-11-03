@@ -17,6 +17,8 @@ import getopt
 
 config = False
 useExistingConfig = False
+generateBusyBox = False
+
 
 destConfigPath = './linux-4.2.3/.config'
 originConfigPath = './.config'
@@ -98,9 +100,14 @@ def copyConfigFile(into=False):
 	os.system('cp ' + _from + ' ' + _to)
 		
 
+def buildBusyBox():
+	print "lololo"
+
 def main(argv):
 	global config
 	global useExistingConfig
+	global generateBusyBox
+
 	try:
 		opts, args = getopt.getopt(argv,"ceb", ["config", "existingconfig", "busybox"])
 	except getopt.GetoptError:
@@ -113,8 +120,15 @@ def main(argv):
 		elif opt in ("-e", "--existingconfig"):
 			config = True
 			useExistingConfig = True
+		
+		elif opt in ("-b", "--busybox"):
+			generateBusyBox = True
 		else:
 			print 'running default'
+
+	if generateBusyBox is True:
+		buildBusyBox()
+		return
 
 	if config is True:
 		makeConfig()
