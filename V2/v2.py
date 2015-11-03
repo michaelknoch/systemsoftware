@@ -79,7 +79,7 @@ def copyInitFs():
 	os.system('cp initfs linux-4.2.3/')	
 
 def runQemu():
-	os.system('qemu-system-arm -M vexpress-a9 -kernel linux-4.2.3/arch/arm/boot/bzImage -nographic -append "console=ttyS0" -initrd ./initramfs_data.cpio.gz')
+	os.system('qemu-system-arm -M vexpress-a9 -kernel linux-4.2.3/arch/arm/boot/bzImage -nographic -serial stdio -append "console=ttyAMA0" -initrd ./initramfs_data.cpio.gz')
 
 def copyConfigFile(into=False):
 	# if into True copy config file from current directory into linux-4.2.3
