@@ -28,8 +28,8 @@ int main(void)
 
 	printf("Kernel: %s %s %s\n", uts.sysname, uts.release, uts.version);
 	printf("Hostname: %s\n", hostname);
-	printf("Machine: %s\n", uts.machine);7
-
+	printf("Machine: %s\n", uts.machine);
+	
 	printf("Uptime: %ld\n", sys.uptime);
 	printf("Total RAM: %lu MB\n", sys.totalram / 1024 / 1024);
 	printf("Free RAM: %lu MB\n", sys.freeram / 1024 / 1024);
