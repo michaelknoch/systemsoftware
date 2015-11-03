@@ -6,5 +6,4 @@ V1/initfs/
 V1/initramfs_data.cpio.gz
 linux-4.2.3.tar.xz
 V1/hello
-V1/sysinfo
-V2/sysinfo
+*/sysinfo
