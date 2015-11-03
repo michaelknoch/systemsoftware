@@ -73,7 +73,7 @@ def makeConfig():
 		os.system('cd linux-4.2.3 && make ARCH=i386 menuconfig')
 
 def build():
-	os.system('cd linux-4.2.3 && make ARCH=i386 -j4')
+	os.system('cd linux-4.2.3 && make ARCH=arm CROSS_COMPILE=armv6j-rpi-linux-gnueabihf -j4')
 
 def copyInitFs():
 	os.system('cp initfs linux-4.2.3/')	
