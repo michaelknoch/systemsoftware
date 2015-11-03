@@ -7,3 +7,4 @@ V1/initramfs_data.cpio.gz
 linux-4.2.3.tar.xz
 V1/hello
 */sysinfo
+busybox/
