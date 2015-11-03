@@ -102,7 +102,7 @@ def main(argv):
 	global config
 	global useExistingConfig
 	try:
-		opts, args = getopt.getopt(argv,"ce", ["config", "existingconfig"])
+		opts, args = getopt.getopt(argv,"ceb", ["config", "existingconfig", "busybox"])
 	except getopt.GetoptError:
 		print 'argument parse error'
 		sys.exit(2)
