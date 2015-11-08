@@ -101,6 +101,10 @@ def copyConfigFile(into=False):
 		
 
 def buildBusyBox():
+	# getting git repo busybox 1_24
+	os.system('git clone http://git.busybox.net/busybox 1_24_stable')
+	os.system('cp .busybox_config busybox/.config')
+	os.system('cd busybox && make ARCH=arm CROSS_COMPILE=armv6j-rpi-linux-gnueabihf')
 	print "lololo"
 
 def main(argv):
