@@ -75,7 +75,7 @@ def makeConfig():
 		os.system('cd linux-4.2.3 && make ARCH=arm menuconfig')
 
 def build():
-	os.system('cd linux-4.2.3 && make ARCH=arm CROSS_COMPILE=armv6j-rpi-linux-gnueabihf -j4')
+	os.system('cd linux-4.2.3 && make ARCH=arm CROSS_COMPILE=armv7j-rpi-linux-gnueabihf -j4')
 
 def copyInitFs():
 	os.system('cp initfs linux-4.2.3/')	
@@ -104,7 +104,7 @@ def buildBusyBox():
 	# getting git repo busybox 1_24
 	os.system('git clone http://git.busybox.net/busybox 1_24_stable')
 	os.system('cp .busybox_config busybox/.config')
-	os.system('cd busybox && make ARCH=arm CROSS_COMPILE=armv6j-rpi-linux-gnueabihf')
+	os.system('cd busybox && make ARCH=arm CROSS_COMPILE=armv7j-rpi-linux-gnueabihf')
 	print "lololo"
 
 def main(argv):
