@@ -22,6 +22,7 @@ generateBusyBox = False
 downloadSources = False
 patchSources = False
 compileSources = False
+checkoutSources = False
 
 
 destConfigPath = './linux-4.2.3/.config'
@@ -114,6 +115,9 @@ def buildBusyBox():
 def patchBusybox():
 	os.system('cp .busybox_config busybox/.config')
 
+def gitCheckoutSources():
+	os.system('git checkout HEAD')
+
 def main(argv):
 	global config, downloadSources, patchSources, compileSources, useExistingConfig, generateBusyBox
 
@@ -140,7 +144,7 @@ def main(argv):
 			patchSources = True
 		# Kopieren Ihrer GitLab Sourcen
 		elif opt in ("-c", "--cp"):
-			generateBusyBox = True
+			checkoutSources = True
 
 		# Kopieren Ihrer GitLab Sourcen
 		elif opt in ("-d", "--co"):
@@ -161,6 +165,11 @@ def main(argv):
 	print opts
 	stepIdx = 1
 
+
+	if checkoutSources:
+		print 'Step ' + str(stepIdx) + ': downloading sources'
+		gitCheckoutSources()
+		stepIdx = stepIdx + 1		
 
 	if downloadSources:
 		print 'Step ' + str(stepIdx) + ': downloading sources'
