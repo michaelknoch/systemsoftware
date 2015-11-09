@@ -83,7 +83,7 @@ def makeConfig():
 		os.system('cd linux-4.2.3 && make ARCH=arm menuconfig')
 
 def buildKernel():
-	os.system('cd linux-4.2.3 && make ARCH=arm CROSS_COMPILE=armv6j-rpi-linux-gnueabihf -j4')
+	os.system('cd linux-4.2.3 && make ARCH=arm CROSS_COMPILE=/group/SYSO_WS1516/armv6j-rpi-linux-gnueabihf/bin/armv6j-rpi-linux-gnueabihf- -j4')
 
 def copyInitFs():
 	os.system('cp initfs linux-4.2.3/')	
