@@ -81,7 +81,7 @@ def makeConfig():
 			copyConfigFile(True)
 		os.system('cd linux-4.2.3 && make ARCH=arm menuconfig')
 
-def build():
+def buildKernel():
 	os.system('cd linux-4.2.3 && make ARCH=arm CROSS_COMPILE=armv7j-rpi-linux-gnueabihf -j4')
 
 def copyInitFs():
@@ -166,7 +166,7 @@ def main(argv):
 
 	if compileSources:
 		print 'Step ' + str(stepIdx) + ': compiling sources'
-		
+		buildKernel()
 		buildBusyBox()
 		stepIdx = stepIdx + 1
 
