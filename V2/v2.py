@@ -21,6 +21,7 @@ generateBusyBox = False
 
 downloadSources = False
 patchSources = False
+compileSources = False
 
 
 destConfigPath = './linux-4.2.3/.config'
@@ -116,7 +117,7 @@ def buildBusyBox():
 	print "lololo"
 
 def main(argv):
-	global config, downloadSources, patchSources, useExistingConfig, generateBusyBox
+	global config, downloadSources, patchSources, compileSources, useExistingConfig, generateBusyBox
 
 	try:
 		opts, args = getopt.getopt(argv, "abcde", ["dn", "pa", "cp", "co", "qe"])
@@ -141,7 +142,7 @@ def main(argv):
 
 		# Kopieren Ihrer GitLab Sourcen
 		elif opt in ("-d", "--co"):
-			generateBusyBox = True
+			compileSources = True
 
 		# Qemu starten + Fenster mit Terminal zur seriellen Schnittstelle
 		elif opt in ("-e", "--qe"):
@@ -160,7 +161,12 @@ def main(argv):
 		stepIdx = stepIdx + 1
 
 	if patchSources:
-		print 'Step ' + str(stepIdx) + ': patch sources'
+		print 'Step ' + str(stepIdx) + ': patching sources'
+		patchKernel()
+		stepIdx = stepIdx + 1
+
+	if compileSources:
+		print 'Step ' + str(stepIdx) + ': compiling sources'
 		patchKernel()
 		stepIdx = stepIdx + 1
 
