@@ -128,8 +128,8 @@ def main(argv):
 		if opt in ("-a", "--dn"):
 			
 			print 'downloading sources'
-			downloadAndExtractKernel()
-			downloadAndExtractBusybox()
+			downloadSources = True
+			
 
 		# Patchen von Quellen
 		elif opt in ("-b", "--pa"):
@@ -150,9 +150,16 @@ def main(argv):
 			print 'running default'
 
 	print opts
+	stepIdx = 1
+
+
+	if downloadSources:
+		print 'Step ' + str(stepIdx) + ': downloading sources'
+		downloadAndExtractKernel()
+		downloadAndExtractBusybox()
+		stepIdx + 1
 
 	return
-
 	if generateBusyBox is True:
 		buildBusyBox()
 		return
