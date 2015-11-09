@@ -90,7 +90,7 @@ def copyInitFs():
 
 def runQemu():
 	# TODO: -dtb
-	os.system('qemu-system-arm -M vexpress-a9 -kernel linux-4.2.3/arch/arm/boot/zImage -nographic -serial stdio -dtb=inux-4.2.3/arch/arm/boot/dts/vexpress-v2p-ca9.dtb -append "console=ttyAMA0" -initrd ./initramfs_data.cpio.gz')
+	os.system('qemu-system-arm -M vexpress-a9 -kernel linux-4.2.3/arch/arm/boot/zImage -nographic -serial stdio -dtb linux-4.2.3/arch/arm/boot/dts/vexpress-v2p-ca9.dtb -append "console=ttyAMA0" -initrd ./initramfs_data.cpio.gz')
 
 def patchKernel(into=True):
 	# if into True copy config file from current directory into linux-4.2.3
