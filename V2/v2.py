@@ -167,7 +167,7 @@ def main(argv):
 
 
 	if checkoutSources:
-		print 'Step ' + str(stepIdx) + ': downloading sources'
+		print 'Step ' + str(stepIdx) + ': checkout repo'
 		gitCheckoutSources()
 		stepIdx = stepIdx + 1		
 
