@@ -122,7 +122,7 @@ def main(argv):
 	os.system('export CROSS_COMPILE=armv6j-rpi-linux-gnueabihf')
 
 	try:
-		opts, args = getopt.getopt(argv, "abcde", ["dn", "pa", "cp", "co", "qe"])
+		opts, args = getopt.getopt(argv, "abcdef", ["dn", "pa", "cp", "co", "qe", "cleanall"])
 	except getopt.GetoptError:
 		print 'argument parse error'
 		sys.exit(2)
@@ -149,6 +149,12 @@ def main(argv):
 		# Qemu starten + Fenster mit Terminal zur seriellen Schnittstelle
 		elif opt in ("-e", "--qe"):
 			generateBusyBox = True
+
+		# cleanup
+		elif opt in ("-f", "--cleanall"):
+			os.system('rm -rf linux-4.2.3/ linux-4.2.3.tar.xz busybox/')
+
+
 		else:
 			print 'running default'
 
