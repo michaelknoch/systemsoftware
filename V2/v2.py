@@ -17,6 +17,8 @@ import getopt
 
 config = False
 useExistingConfig = False
+generateBusyBox = False
+
 
 destConfigPath = './linux-4.2.3/.config'
 originConfigPath = './.config'
@@ -73,12 +75,13 @@ def makeConfig():
 		os.system('cd linux-4.2.3 && make ARCH=arm menuconfig')
 
 def build():
-	os.system('cd linux-4.2.3 && make ARCH=arm CROSS_COMPILE=armv6j-rpi-linux-gnueabihf -j4')
+	os.system('cd linux-4.2.3 && make ARCH=arm CROSS_COMPILE=armv7j-rpi-linux-gnueabihf -j4')
 
 def copyInitFs():
 	os.system('cp initfs linux-4.2.3/')	
 
 def runQemu():
+	# TODO: -dtb
 	os.system('qemu-system-arm -M vexpress-a9 -kernel linux-4.2.3/arch/arm/boot/bzImage -nographic -serial stdio -append "console=ttyAMA0" -initrd ./initramfs_data.cpio.gz')
 
 def copyConfigFile(into=False):
@@ -98,23 +101,56 @@ def copyConfigFile(into=False):
 	os.system('cp ' + _from + ' ' + _to)
 		
 
+def buildBusyBox():
+	# getting git repo busybox 1_24
+	os.system('git clone http://git.busybox.net/busybox')
+	os.system('git checkout 1_24_1')
+	os.system('cp .busybox_config busybox/.config')
+	os.system('cd busybox && make ARCH=arm CROSS_COMPILE=armv7j-rpi-linux-gnueabihf')
+	print "lololo"
+
 def main(argv):
 	global config
 	global useExistingConfig
+	global generateBusyBox
+
 	try:
-		opts, args = getopt.getopt(argv,"ce", ["config", "existingconfig"])
+		opts, args = getopt.getopt(argv, "abcde", ["dn", "pa", "cp", "co", "qe"])
 	except getopt.GetoptError:
 		print 'argument parse error'
 		sys.exit(2)
 	for opt, arg in opts:
-		if opt in ("-c", "--config"):
+
+		# Download Quellen
+		if opt in ("-a", "--dn"):
 			config = True
 			print 'new config'
-		elif opt in ("-e", "--existingconfig"):
+
+		# Patchen von Quellen
+		elif opt in ("-b", "--pa"):
 			config = True
 			useExistingConfig = True
+		# Kopieren Ihrer GitLab Sourcen
+		elif opt in ("-c", "--cp"):
+			generateBusyBox = True
+
+		# Kopieren Ihrer GitLab Sourcen
+		elif opt in ("-d", "--co"):
+			generateBusyBox = True
+
+		# Qemu starten + Fenster mit Terminal zur seriellen Schnittstelle
+		elif opt in ("-e", "--qe"):
+			generateBusyBox = True
 		else:
 			print 'running default'
+
+	print opts
+
+	return
+
+	if generateBusyBox is True:
+		buildBusyBox()
+		return
 
 	if config is True:
 		makeConfig()
