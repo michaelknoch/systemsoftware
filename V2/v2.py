@@ -19,6 +19,8 @@ config = False
 useExistingConfig = False
 generateBusyBox = False
 
+downloadSources = False
+
 
 destConfigPath = './linux-4.2.3/.config'
 originConfigPath = './.config'
@@ -113,9 +115,7 @@ def buildBusyBox():
 	print "lololo"
 
 def main(argv):
-	global config
-	global useExistingConfig
-	global generateBusyBox
+	global config, downloadSources, useExistingConfig, generateBusyBox
 
 	try:
 		opts, args = getopt.getopt(argv, "abcde", ["dn", "pa", "cp", "co", "qe"])
