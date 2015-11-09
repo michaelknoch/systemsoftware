@@ -64,7 +64,7 @@ def downloadAndExtractKernel():
 
 def downloadAndExtractBusybox():
 	os.system('git clone http://git.busybox.net/busybox')
-	os.system('cd busybox && git checkout 1_24_1')
+	os.system('cd busybox && git checkout 1_24_stable')
 
 def makeConfig():
 	global config
