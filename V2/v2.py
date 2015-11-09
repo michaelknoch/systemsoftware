@@ -109,13 +109,17 @@ def patchKernel(into=True):
 		
 
 def buildBusyBox():
-	os.system('cd busybox && make ARCH=arm CROSS_COMPILE=armv7j-rpi-linux-gnueabihf')
+	os.system('cd busybox && make ARCH=arm CROSS_COMPILE=armv6j-rpi-linux-gnueabihf')
 
 def patchBusybox():
 	os.system('cp .busybox_config busybox/.config')
 
 def main(argv):
 	global config, downloadSources, patchSources, compileSources, useExistingConfig, generateBusyBox
+
+	print 'exporting values'
+	os.system('export arch=arm')
+	os.system('export CROSS_COMPILE=armv6j-rpi-linux-gnueabihf')
 
 	try:
 		opts, args = getopt.getopt(argv, "abcde", ["dn", "pa", "cp", "co", "qe"])
