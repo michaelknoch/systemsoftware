@@ -81,6 +81,7 @@ def copyInitFs():
 	os.system('cp initfs linux-4.2.3/')	
 
 def runQemu():
+	# TODO: -dtb
 	os.system('qemu-system-arm -M vexpress-a9 -kernel linux-4.2.3/arch/arm/boot/bzImage -nographic -serial stdio -append "console=ttyAMA0" -initrd ./initramfs_data.cpio.gz')
 
 def copyConfigFile(into=False):
@@ -113,22 +114,38 @@ def main(argv):
 	global generateBusyBox
 
 	try:
-		opts, args = getopt.getopt(argv,"ceb", ["config", "existingconfig", "busybox"])
+		opts, args = getopt.getopt(argv, "abcde", ["dn", "pa", "cp", "co", "qe"])
 	except getopt.GetoptError:
 		print 'argument parse error'
 		sys.exit(2)
 	for opt, arg in opts:
-		if opt in ("-c", "--config"):
+
+		# Download Quellen
+		if opt in ("-a", "--dn"):
 			config = True
 			print 'new config'
-		elif opt in ("-e", "--existingconfig"):
+
+		# Patchen von Quellen
+		elif opt in ("-b", "--pa"):
 			config = True
 			useExistingConfig = True
-		
-		elif opt in ("-b", "--busybox"):
+		# Kopieren Ihrer GitLab Sourcen
+		elif opt in ("-c", "--cp"):
+			generateBusyBox = True
+
+		# Kopieren Ihrer GitLab Sourcen
+		elif opt in ("-d", "--co"):
+			generateBusyBox = True
+
+		# Qemu starten + Fenster mit Terminal zur seriellen Schnittstelle
+		elif opt in ("-e", "--qe"):
 			generateBusyBox = True
 		else:
 			print 'running default'
+
+	print opts
+
+	return
 
 	if generateBusyBox is True:
 		buildBusyBox()
