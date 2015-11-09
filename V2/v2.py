@@ -20,6 +20,7 @@ useExistingConfig = False
 generateBusyBox = False
 
 downloadSources = False
+patchSources = False
 
 
 destConfigPath = './linux-4.2.3/.config'
@@ -89,7 +90,7 @@ def runQemu():
 	# TODO: -dtb
 	os.system('qemu-system-arm -M vexpress-a9 -kernel linux-4.2.3/arch/arm/boot/bzImage -nographic -serial stdio -append "console=ttyAMA0" -initrd ./initramfs_data.cpio.gz')
 
-def copyConfigFile(into=False):
+def patchKernel(into=True):
 	# if into True copy config file from current directory into linux-4.2.3
 	# otherwise from linux-4.2.3 to current directory
 	_from = originConfigPath
@@ -115,7 +116,7 @@ def buildBusyBox():
 	print "lololo"
 
 def main(argv):
-	global config, downloadSources, useExistingConfig, generateBusyBox
+	global config, downloadSources, patchSources, useExistingConfig, generateBusyBox
 
 	try:
 		opts, args = getopt.getopt(argv, "abcde", ["dn", "pa", "cp", "co", "qe"])
@@ -133,8 +134,7 @@ def main(argv):
 
 		# Patchen von Quellen
 		elif opt in ("-b", "--pa"):
-			config = True
-			useExistingConfig = True
+			patchSources = True
 		# Kopieren Ihrer GitLab Sourcen
 		elif opt in ("-c", "--cp"):
 			generateBusyBox = True
@@ -157,7 +157,12 @@ def main(argv):
 		print 'Step ' + str(stepIdx) + ': downloading sources'
 		downloadAndExtractKernel()
 		downloadAndExtractBusybox()
-		stepIdx + 1
+		stepIdx = stepIdx + 1
+
+	if patchSources:
+		print 'Step ' + str(stepIdx) + ': patch sources'
+		patchKernel()
+		stepIdx = stepIdx + 1
 
 	return
 	if generateBusyBox is True:
