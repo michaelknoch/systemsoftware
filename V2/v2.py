@@ -126,8 +126,10 @@ def main(argv):
 
 		# Download Quellen
 		if opt in ("-a", "--dn"):
-			config = True
-			print 'new config'
+			
+			print 'downloading sources'
+			downloadAndExtractKernel()
+			downloadAndExtractBusybox()
 
 		# Patchen von Quellen
 		elif opt in ("-b", "--pa"):
