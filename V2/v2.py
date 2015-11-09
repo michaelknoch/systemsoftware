@@ -19,6 +19,10 @@ config = False
 useExistingConfig = False
 generateBusyBox = False
 
+downloadSources = False
+patchSources = False
+compileSources = False
+
 
 destConfigPath = './linux-4.2.3/.config'
 originConfigPath = './.config'
@@ -64,7 +68,7 @@ def downloadAndExtractKernel():
 
 def downloadAndExtractBusybox():
 	os.system('git clone http://git.busybox.net/busybox')
-	os.system('cd busybox && git checkout 1_24_1')
+	os.system('cd busybox && git checkout 1_24_stable')
 
 def makeConfig():
 	global config
@@ -77,7 +81,7 @@ def makeConfig():
 			copyConfigFile(True)
 		os.system('cd linux-4.2.3 && make ARCH=arm menuconfig')
 
-def build():
+def buildKernel():
 	os.system('cd linux-4.2.3 && make ARCH=arm CROSS_COMPILE=armv7j-rpi-linux-gnueabihf -j4')
 
 def copyInitFs():
@@ -87,7 +91,7 @@ def runQemu():
 	# TODO: -dtb
 	os.system('qemu-system-arm -M vexpress-a9 -kernel linux-4.2.3/arch/arm/boot/bzImage -nographic -serial stdio -append "console=ttyAMA0" -initrd ./initramfs_data.cpio.gz')
 
-def copyConfigFile(into=False):
+def patchKernel(into=True):
 	# if into True copy config file from current directory into linux-4.2.3
 	# otherwise from linux-4.2.3 to current directory
 	_from = originConfigPath
@@ -105,17 +109,13 @@ def copyConfigFile(into=False):
 		
 
 def buildBusyBox():
-	# getting git repo busybox 1_24
-	os.system('git clone http://git.busybox.net/busybox')
-	os.system('git checkout 1_24_1')
-	os.system('cp .busybox_config busybox/.config')
 	os.system('cd busybox && make ARCH=arm CROSS_COMPILE=armv7j-rpi-linux-gnueabihf')
-	print "lololo"
+
+def patchBusybox():
+	os.system('cp .busybox_config busybox/.config')
 
 def main(argv):
-	global config
-	global useExistingConfig
-	global generateBusyBox
+	global config, downloadSources, patchSources, compileSources, useExistingConfig, generateBusyBox
 
 	try:
 		opts, args = getopt.getopt(argv, "abcde", ["dn", "pa", "cp", "co", "qe"])
@@ -128,20 +128,19 @@ def main(argv):
 		if opt in ("-a", "--dn"):
 			
 			print 'downloading sources'
-			downloadAndExtractKernel()
-			downloadAndExtractBusybox()
+			downloadSources = True
+			
 
 		# Patchen von Quellen
 		elif opt in ("-b", "--pa"):
-			config = True
-			useExistingConfig = True
+			patchSources = True
 		# Kopieren Ihrer GitLab Sourcen
 		elif opt in ("-c", "--cp"):
 			generateBusyBox = True
 
 		# Kopieren Ihrer GitLab Sourcen
 		elif opt in ("-d", "--co"):
-			generateBusyBox = True
+			compileSources = True
 
 		# Qemu starten + Fenster mit Terminal zur seriellen Schnittstelle
 		elif opt in ("-e", "--qe"):
@@ -150,9 +149,28 @@ def main(argv):
 			print 'running default'
 
 	print opts
+	stepIdx = 1
+
+
+	if downloadSources:
+		print 'Step ' + str(stepIdx) + ': downloading sources'
+		downloadAndExtractKernel()
+		downloadAndExtractBusybox()
+		stepIdx = stepIdx + 1
+
+	if patchSources:
+		print 'Step ' + str(stepIdx) + ': patching sources'
+		patchKernel()
+		patchBusybox
+		stepIdx = stepIdx + 1
+
+	if compileSources:
+		print 'Step ' + str(stepIdx) + ': compiling sources'
+		buildKernel()
+		buildBusyBox()
+		stepIdx = stepIdx + 1
 
 	return
-
 	if generateBusyBox is True:
 		buildBusyBox()
 		return
