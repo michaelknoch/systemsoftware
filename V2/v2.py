@@ -109,12 +109,10 @@ def patchKernel(into=True):
 		
 
 def buildBusyBox():
-	# getting git repo busybox 1_24
-	os.system('git clone http://git.busybox.net/busybox')
-	os.system('git checkout 1_24_1')
-	os.system('cp .busybox_config busybox/.config')
 	os.system('cd busybox && make ARCH=arm CROSS_COMPILE=armv7j-rpi-linux-gnueabihf')
-	print "lololo"
+
+def patchBusybox():
+	os.system('cp .busybox_config busybox/.config')
 
 def main(argv):
 	global config, downloadSources, patchSources, compileSources, useExistingConfig, generateBusyBox
@@ -163,11 +161,13 @@ def main(argv):
 	if patchSources:
 		print 'Step ' + str(stepIdx) + ': patching sources'
 		patchKernel()
+		patchBusybox
 		stepIdx = stepIdx + 1
 
 	if compileSources:
 		print 'Step ' + str(stepIdx) + ': compiling sources'
-		patchKernel()
+		
+		buildBusyBox()
 		stepIdx = stepIdx + 1
 
 	return
