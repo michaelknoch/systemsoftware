@@ -67,13 +67,13 @@ def makeConfig():
 	# run allnoconfig & menuconfig when .config is not present
 	if config:
 		if not useExistingConfig:
-			os.system('cd linux-4.2.3 && make ARCH=i386 allnoconfig')
+			os.system('cd linux-4.2.3 && make ARCH=arm allnoconfig')
 		else:
 			copyConfigFile(True)
-		os.system('cd linux-4.2.3 && make ARCH=i386 menuconfig')
+		os.system('cd linux-4.2.3 && make ARCH=arm menuconfig')
 
 def build():
-	os.system('cd linux-4.2.3 && make ARCH=i386 -j4')
+	os.system('cd linux-4.2.3 && make ARCH=arm CROSS_COMPILE=armv6j-rpi-linux-gnueabihf -j4')
 
 def copyInitFs():
 	os.system('cp initfs linux-4.2.3/')	
