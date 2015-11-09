@@ -22,6 +22,7 @@ generateBusyBox = False
 downloadSources = False
 patchSources = False
 compileSources = False
+checkoutSources = False
 
 
 destConfigPath = './linux-4.2.3/.config'
@@ -109,16 +110,23 @@ def patchKernel(into=True):
 		
 
 def buildBusyBox():
-	os.system('cd busybox && make ARCH=arm CROSS_COMPILE=armv7j-rpi-linux-gnueabihf')
+	os.system('cd busybox && make ARCH=arm CROSS_COMPILE=armv6j-rpi-linux-gnueabihf')
 
 def patchBusybox():
 	os.system('cp .busybox_config busybox/.config')
 
+def gitCheckoutSources():
+	os.system('git checkout HEAD')
+
 def main(argv):
 	global config, downloadSources, patchSources, compileSources, useExistingConfig, generateBusyBox
 
+	print 'exporting values'
+	os.system('export arch=arm')
+	os.system('export CROSS_COMPILE=armv6j-rpi-linux-gnueabihf')
+
 	try:
-		opts, args = getopt.getopt(argv, "abcde", ["dn", "pa", "cp", "co", "qe"])
+		opts, args = getopt.getopt(argv, "abcdef", ["dn", "pa", "cp", "co", "qe", "cleanall"])
 	except getopt.GetoptError:
 		print 'argument parse error'
 		sys.exit(2)
@@ -136,7 +144,7 @@ def main(argv):
 			patchSources = True
 		# Kopieren Ihrer GitLab Sourcen
 		elif opt in ("-c", "--cp"):
-			generateBusyBox = True
+			checkoutSources = True
 
 		# Kopieren Ihrer GitLab Sourcen
 		elif opt in ("-d", "--co"):
@@ -145,12 +153,23 @@ def main(argv):
 		# Qemu starten + Fenster mit Terminal zur seriellen Schnittstelle
 		elif opt in ("-e", "--qe"):
 			generateBusyBox = True
+
+		# cleanup
+		elif opt in ("-f", "--cleanall"):
+			os.system('rm -rf linux-4.2.3/ linux-4.2.3.tar.xz busybox/')
+
+
 		else:
 			print 'running default'
 
 	print opts
 	stepIdx = 1
 
+
+	if checkoutSources:
+		print 'Step ' + str(stepIdx) + ': checkout repo'
+		gitCheckoutSources()
+		stepIdx = stepIdx + 1		
 
 	if downloadSources:
 		print 'Step ' + str(stepIdx) + ': downloading sources'
