@@ -83,14 +83,14 @@ def makeConfig():
 		os.system('cd linux-4.2.3 && make ARCH=arm menuconfig')
 
 def buildKernel():
-	os.system('cd linux-4.2.3 && make ARCH=arm CROSS_COMPILE=armv7j-rpi-linux-gnueabihf -j4')
+	os.system('cd linux-4.2.3 && make ARCH=arm CROSS_COMPILE=armv6j-rpi-linux-gnueabihf -j4')
 
 def copyInitFs():
 	os.system('cp initfs linux-4.2.3/')	
 
 def runQemu():
 	# TODO: -dtb
-	os.system('qemu-system-arm -M vexpress-a9 -kernel linux-4.2.3/arch/arm/boot/bzImage -nographic -serial stdio -append "console=ttyAMA0" -initrd ./initramfs_data.cpio.gz')
+	os.system('qemu-system-arm -M vexpress-a9 -kernel linux-4.2.3/arch/arm/boot/zImage -nographic -serial stdio -append "console=ttyAMA0" -initrd ./initramfs_data.cpio.gz')
 
 def patchKernel(into=True):
 	# if into True copy config file from current directory into linux-4.2.3
@@ -124,6 +124,7 @@ def main(argv):
 	print 'exporting values'
 	os.system('export arch=arm')
 	os.system('export CROSS_COMPILE=armv6j-rpi-linux-gnueabihf')
+	os.system('export QEMU_AUDIO_DRV=none')
 
 	try:
 		opts, args = getopt.getopt(argv, "abcdef", ["dn", "pa", "cp", "co", "qe", "cleanall"])
