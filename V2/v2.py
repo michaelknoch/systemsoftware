@@ -34,7 +34,7 @@ def initFs():
 	os.system('rm -rf ./initfs')
 	os.system('rm -rf ./initramfs_data.cpio.gz')
 
-	os.system('gcc -static -m32 sysinfo.c -o sysinfo')
+	os.system('/group/SYSO_WS1516/armv6j-rpi-linux-gnueabihf/bin/armv6j-rpi-linux-gnueabihf-gcc -static sysinfo.c -o sysinfo')
 
 	os.makedirs('initfs/dev')
 	os.makedirs('initfs/bin')
@@ -110,7 +110,7 @@ def patchKernel(into=True):
 		
 
 def buildBusyBox():
-	os.system('cd busybox && make ARCH=arm CROSS_COMPILE=armv6j-rpi-linux-gnueabihf')
+	os.system('cd busybox && make ARCH=arm CROSS_COMPILE=/group/SYSO_WS1516/armv6j-rpi-linux-gnueabihf/bin/armv6j-rpi-linux-gnueabihf-')
 
 def patchBusybox():
 	os.system('cp .busybox_config busybox/.config')
@@ -119,11 +119,11 @@ def gitCheckoutSources():
 	os.system('git checkout HEAD')
 
 def main(argv):
-	global config, downloadSources, patchSources, compileSources, useExistingConfig, generateBusyBox
+	global config, downloadSources, patchSources, compileSources, checkoutSources, useExistingConfig, generateBusyBox
 
 	print 'exporting values'
-	os.system('export arch=arm')
-	os.system('export CROSS_COMPILE=armv6j-rpi-linux-gnueabihf')
+	os.system('export ARCH=arm')
+	os.system('export CROSS_COMPILE=/group/SYSO_WS1516/armv6j-rpi-linux-gnueabihf/bin/armv6j-rpi-linux-gnueabihf-')
 	os.system('export QEMU_AUDIO_DRV=none')
 
 	try:
@@ -181,13 +181,14 @@ def main(argv):
 	if patchSources:
 		print 'Step ' + str(stepIdx) + ': patching sources'
 		patchKernel()
-		patchBusybox
+		patchBusybox()
 		stepIdx = stepIdx + 1
 
 	if compileSources:
 		print 'Step ' + str(stepIdx) + ': compiling sources'
-		buildKernel()
 		buildBusyBox()
+		initFs()
+		buildKernel()
 		stepIdx = stepIdx + 1
 
 	return
