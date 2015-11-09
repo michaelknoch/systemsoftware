@@ -47,7 +47,7 @@ def initFs():
 	os.system('cd initfs && find . | cpio -o -H newc | gzip > ../initramfs_data.cpio.gz')
 	os.system('rm -rf ./initfs')
 
-def init():
+def downloadAndExtractKernel():
 	print('Script started...')
 	# download and extract kernel
 
@@ -62,6 +62,9 @@ def init():
 		os.system('tar xfv linux-4.2.3.tar.xz')
 		print('extract Success')
 
+def downloadAndExtractBusybox():
+	os.system('git clone http://git.busybox.net/busybox')
+	os.system('cd busybox git checkout 1_24_1')
 
 def makeConfig():
 	global config
@@ -155,7 +158,7 @@ def main(argv):
 	if config is True:
 		makeConfig()
 	else:
-		init()
+		downloadAndExtractKernel()
 		initFs()
 		copyConfigFile(True)
 		build()
