@@ -147,13 +147,14 @@ def main(argv):
 		elif opt in ("-c", "--cp"):
 			checkoutSources = True
 
-		# Kopieren Ihrer GitLab Sourcen
+		# compile
 		elif opt in ("-d", "--co"):
 			compileSources = True
 
 		# Qemu starten + Fenster mit Terminal zur seriellen Schnittstelle
 		elif opt in ("-e", "--qe"):
-			generateBusyBox = True
+			print 'todo --qe'
+			#generateBusyBox = True
 
 		# cleanup
 		elif opt in ("-f", "--cleanall"):
