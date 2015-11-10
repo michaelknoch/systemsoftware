@@ -23,6 +23,7 @@ downloadSources = False
 patchSources = False
 compileSources = False
 checkoutSources = False
+startQemu = False
 
 
 destConfigPath = './linux-4.2.3/.config'
@@ -47,7 +48,7 @@ def initFs():
 	os.makedirs('initfs/usr/bin')
 	os.system('cp init.sh initfs/init')
 	os.system('cp sysinfo initfs/bin/sysinfo')
-	os.system('cp busybox initfs/bin/busybox')
+	os.system('cp busybox/busybox initfs/bin/busybox')
 	os.system('find ./initfs -type f -exec chmod 777 {} \;')
 	os.system('cd initfs && find . | cpio -o -H newc | gzip > ../initramfs_data.cpio.gz')
 	os.system('rm -rf ./initfs')
@@ -90,7 +91,7 @@ def copyInitFs():
 
 def runQemu():
 	# TODO: -dtb
-	os.system('qemu-system-arm -M vexpress-a9 -kernel linux-4.2.3/arch/arm/boot/zImage -nographic -serial stdio -dtb linux-4.2.3/arch/arm/boot/dts/vexpress-v2p-ca9.dtb -append "console=ttyAMA0" -initrd ./initramfs_data.cpio.gz')
+	os.system('qemu-system-arm vexpress-a9 -kernel linux-4.2.3/arch/arm/boot/zImage -nographic -serial stdio -dtb linux-4.2.3/arch/arm/boot/dts/vexpress-v2p-ca9.dtb -append "console=ttyAMA0" -initrd ./initramfs_data.cpio.gz')
 
 def patchKernel(into=True):
 	# if into True copy config file from current directory into linux-4.2.3
@@ -120,7 +121,7 @@ def gitCheckoutSources():
 	os.system('git checkout HEAD')
 
 def main(argv):
-	global config, downloadSources, patchSources, compileSources, checkoutSources, useExistingConfig, generateBusyBox
+	global config, downloadSources, patchSources, compileSources, checkoutSources, useExistingConfig, generateBusyBox, startQemu
 
 	print 'exporting values'
 	os.system('export ARCH=arm')
@@ -155,7 +156,7 @@ def main(argv):
 		# Qemu starten + Fenster mit Terminal zur seriellen Schnittstelle
 		elif opt in ("-e", "--qe"):
 			print 'todo --qe'
-			#generateBusyBox = True
+			startQemu = True
 
 		# cleanup
 		elif opt in ("-f", "--cleanall"):
@@ -191,6 +192,11 @@ def main(argv):
 		buildBusyBox()
 		initFs()
 		buildKernel()
+		stepIdx = stepIdx + 1
+
+	if startQemu:
+		print 'Step ' + str(stepIdx) + ': run qemu'
+		runQemu()
 		stepIdx = stepIdx + 1
 
 	return
