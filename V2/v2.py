@@ -113,6 +113,7 @@ def buildBusyBox():
 	os.system('cd busybox && make ARCH=arm CROSS_COMPILE=/group/SYSO_WS1516/armv6j-rpi-linux-gnueabihf/bin/armv6j-rpi-linux-gnueabihf-')
 
 def patchBusybox():
+	print 'cp .busybox_config busybox/.config'
 	os.system('cp .busybox_config busybox/.config')
 
 def gitCheckoutSources():
