@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
 # Busybox version: 1.24.1
-# Tue Nov 10 14:28:37 2015
+# Tue Nov 10 14:30:13 2015
 #
 CONFIG_HAVE_DOT_CONFIG=y
 
@@ -96,7 +96,7 @@ CONFIG_PREFIX="./_install"
 #
 # Busybox Library Tuning
 #
-CONFIG_FEATURE_SYSTEMD=y
+# CONFIG_FEATURE_SYSTEMD is not set
 # CONFIG_FEATURE_RTMINMAX is not set
 CONFIG_PASSWORD_MINLEN=6
 CONFIG_MD5_SMALL=1
