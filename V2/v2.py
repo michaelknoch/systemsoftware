@@ -45,6 +45,7 @@ def initFs():
 	os.makedirs('initfs/var')
 	os.makedirs('initfs/sys')
 	os.makedirs('initfs/dev/pts')
+	os.makedirs('initfs/dev/ptmx')
 	os.makedirs('initfs/proc')
 	os.makedirs('initfs/usr/bin')
 	os.system('cp init.sh initfs/init')
