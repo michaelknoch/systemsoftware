@@ -22,18 +22,13 @@ mount -t devpts devpts /dev/pts
 mdev -s
 
 
-/bin/chown root.root /bin/busybox
+/bin/chow 0.0 /bin/busybox
 /bin/chmod 4755 /bin/busybox
 
 # Set loglevel to "Emergency messages, system is about to crash or is unstable"
 echo 0 > /proc/sys/kernel/printk
 
-ls /etc
-ls /etc/udhcp
-ls /bin
-ls /usr/share/udhcpc
-
-udhcpc -i eth0 -s /etc/udhcp/sample.script
+udhcpc -i eth0 -s /etc/udhcp/simple.script
 
 #feuer frei
 ./bin/sysinfo
