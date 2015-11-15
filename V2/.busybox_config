@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
 # Busybox version: 1.24.1
-# Tue Nov 10 18:05:28 2015
+# Sun Nov 15 15:04:29 2015
 #
 CONFIG_HAVE_DOT_CONFIG=y
 
@@ -305,7 +305,7 @@ CONFIG_UNAME_OSNAME="GNU/Linux"
 # CONFIG_UUENCODE is not set
 # CONFIG_WC is not set
 # CONFIG_FEATURE_WC_LARGE is not set
-# CONFIG_WHOAMI is not set
+CONFIG_WHOAMI=y
 # CONFIG_YES is not set
 
 #
