@@ -42,7 +42,7 @@ echo 'asd'
 ifconfig
 echo 'asd2'
 
-telnetd 192.168.26.48 /bin/sh
+telnetd 192.168.26.48 -l /bin/sh
 
 #setsid cttyhack sh
 
