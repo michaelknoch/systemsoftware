@@ -19,11 +19,12 @@ mount -t sysfs none /sys
 mount -t proc proc /proc
 
 mount -t devpts devpts /dev/pts
-mdev -s
 
 
 /bin/chown 0.0 /bin/busybox
 /bin/chmod 4755 /bin/busybox
+
+mdev -s
 
 # Set loglevel to "Emergency messages, system is about to crash or is unstable"
 echo 0 > /proc/sys/kernel/printk
@@ -40,6 +41,9 @@ udhcpc -i eth0 -s /etc/udhcp/simple.script
 echo 'asd'
 ifconfig
 echo 'asd2'
+
+telnetd 192.168.26.48 /bin/sh
+
 #setsid cttyhack sh
 
 exec sh
