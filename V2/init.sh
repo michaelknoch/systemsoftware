@@ -29,18 +29,18 @@ mdev -s
 # Set loglevel to "Emergency messages, system is about to crash or is unstable"
 echo 0 > /proc/sys/kernel/printk
 
-chmod 777 /etc/udhcp/simple.script
-ls -la /etc/udhcp/simple.script
-whoami
+#chmod 777 /etc/udhcp/simple.script
+#ls -la /etc/udhcp/simple.script
+#whoami
 udhcpc -i eth0 -s /etc/udhcp/simple.script
 
 #feuer frei
 ./bin/sysinfo
 
 ## shell feuern
-echo 'asd'
-ifconfig
-echo 'asd2'
+#echo 'asd'
+#ifconfig
+#echo 'asd2'
 
 telnetd 192.168.26.48 -l /bin/sh
 
