@@ -44,6 +44,6 @@ echo 'asd2'
 
 telnetd 192.168.26.48 -l /bin/sh
 
-#setsid cttyhack sh
+setsid cttyhack /bin/busybox sh
 
-exec sh
+
