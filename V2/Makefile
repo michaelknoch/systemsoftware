@@ -1,5 +1,5 @@
-CC=gcc
-CFLAGS = -g -W -Wall -ansi -pedantic
+CC = /group/SYSO_WS1516/armv6j-rpi-linux-gnueabihf/bin/armv6j-rpi-linux-gnueabihf-gcc
+CFLAGS = -g -W -Wall -ansi -static -pedantic
 
 TARGET = sysinfo
 
