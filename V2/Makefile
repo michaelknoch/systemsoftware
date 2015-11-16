@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS = -g -W -Wall -ansi -pedantic
+CFLAGS = -g -W -Wall -ansi -static -pedantic
 
 TARGET = sysinfo
 
