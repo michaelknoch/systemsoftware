@@ -62,7 +62,7 @@ def initFs():
 	#os.system('rm -rf ./initfs')
 
 def doNewBuildRootStuff():
-	os.system('cp -R buildroot/output/images/ ./brImages')
+	os.system('cp -R buildroot/output/images/* ./brImages')
 	os.system('mkimage -A arm -O linux -T ramdisk -C none -n "U-Boot RamFS" -d ./brImages/rootfs.tar ./brImages/rootfs.cpio.uboot')
 	os.system('mkimage -A arm -O linux -T script -C none -d ./tftpinit.scr.txt ./brImages/tftpboot.scr')
 	os.system('cp -R ./brImages/* /srv/tftp/rpi/7/')
