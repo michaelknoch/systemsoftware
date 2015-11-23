@@ -65,7 +65,7 @@ def doNewBuildRootStuff():
 	os.system('cp -R buildroot/output/images/ ./brImages')
 	os.system('mkimage -A arm -O linux -T ramdisk -C none -n "U-Boot RamFS" -d ./brImages/rootfs.tar ./brImages/rootfs.cpio.uboot')
 	os.system('mkimage -A arm -O linux -T script -C none -d ./tftpinit.scr.txt ./brImages/tftpboot.scr')
-	os.system('cp -R ./bzImages/ /srv/tftp/rpi/7/')
+	os.system('cp -R ./brImages/ /srv/tftp/rpi/7/')
 
 def downloadAndExtractKernel():
 	print('Script started...')
@@ -195,6 +195,11 @@ def main(argv):
 
 	print opts
 	stepIdx = 1
+
+	if experimentell:
+		print 'dont do this at home'
+		doNewBuildRootStuff()
+		return
 
 
 	if checkoutSources:
