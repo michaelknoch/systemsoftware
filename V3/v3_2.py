@@ -195,6 +195,7 @@ def main(argv):
 		print 'Step ' + str(stepIdx) + ': patching sources'
 		patchKernel()
 		patchBusybox()
+		patchPatch()
 		stepIdx = stepIdx + 1
 
 	if compileSources:
