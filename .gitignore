@@ -7,8 +7,5 @@ V1/initfs/
 linux-4.2.3.tar.xz
 V1/hello
 */sysinfo
-<<<<<<< HEAD
 busybox/
-=======
 1_24_stable/
->>>>>>> dfc1fcecc6e443d400a399dea5ae79724ebaf775
