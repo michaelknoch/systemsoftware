@@ -123,6 +123,10 @@ def patchBusybox():
 	print 'cp .busybox_config busybox/.config'
 	os.system('cp .busybox_config busybox/.config')
 
+def patchPatch():
+	print 'patch -p1 < linux-smsc95xx_allow_mac_setting.patch'
+	os.system('cd linux-4.2.3 && patch -p1 < ../linux-smsc95xx_allow_mac_setting.patch')
+
 def gitCheckoutSources():
 	os.system('git checkout HEAD')
 
