@@ -24,6 +24,7 @@ patchSources = False
 compileSources = False
 checkoutSources = False
 startQemu = False
+experimentell = False
 
 
 destConfigPath = './linux-4.2.3/.config'
@@ -32,7 +33,7 @@ originConfigPath = './.config'
 def initFs():
 	
 
-	os.system('rm -rf ./initfs')
+	#os.system('rm -rf ./initfs')
 	os.system('rm -rf ./initramfs_data.cpio.gz')
 
 	#os.system('/group/SYSO_WS1516/armv6j-rpi-linux-gnueabihf/bin/armv6j-rpi-linux-gnueabihf-gcc -static sysinfo.c -o sysinfo')
@@ -57,7 +58,14 @@ def initFs():
 	#os.system('cp -r udhcp/ initfs/etc/udhcpc/')
 	os.system('find ./initfs -type f -exec chmod 777 {} \;')
 	os.system('cd initfs && find . | cpio -o -H newc | gzip > ../initramfs_data.cpio.gz')
-	os.system('rm -rf ./initfs')
+	os.system('mkimage -A arm -O linux -T ramdisk -C none -n "U-Boot RamFS" -d initramfs_data.cpio.gz rootfs.cpio.uboot')
+	#os.system('rm -rf ./initfs')
+
+def doNewBuildRootStuff():
+	os.system('cp -R buildroot/output/images/ ./brImages')
+	os.system('mkimage -A arm -O linux -T ramdisk -C none -n "U-Boot RamFS" -d ./brImages/rootfs.tar ./brImages/rootfs.cpio.uboot')
+	os.system('mkimage -A arm -O linux -T script -C none -d ./tftpinit.scr.txt ./brImages/tftpboot.scr')
+	os.system('cp -R ./bzImages/ /srv/tftp/rpi/7/')
 
 def downloadAndExtractKernel():
 	print('Script started...')
@@ -98,6 +106,7 @@ def copyInitFs():
 def generateDtbFiles():
 	# TODO vexpress
 	os.system('cd linux-4.2.3 && make bcm2835-rpi-b.dtb')
+	os.system('cp linux-4.2.3/arch/arm/boot/dts/bcm2835-rpi-b.dtb ./')
 
 def runQemu():
 	# TODO: -dtb
@@ -135,7 +144,7 @@ def gitCheckoutSources():
 	os.system('git checkout HEAD')
 
 def main(argv):
-	global config, downloadSources, patchSources, compileSources, checkoutSources, useExistingConfig, generateBusyBox, startQemu
+	global config, downloadSources, patchSources, compileSources, checkoutSources, useExistingConfig, generateBusyBox, startQemu, experimentell
 
 	print 'exporting values'
 	os.system('export ARCH=arm')
@@ -143,7 +152,7 @@ def main(argv):
 	os.system('export QEMU_AUDIO_DRV=none')
 
 	try:
-		opts, args = getopt.getopt(argv, "abcdef", ["dn", "pa", "cp", "co", "qe", "cleanall"])
+		opts, args = getopt.getopt(argv, "abcdefg", ["dn", "pa", "cp", "co", "qe", "cleanall", "exp"])
 	except getopt.GetoptError:
 		print 'argument parse error'
 		sys.exit(2)
@@ -175,6 +184,10 @@ def main(argv):
 		# cleanup
 		elif opt in ("-f", "--cleanall"):
 			os.system('rm -rf linux-4.2.3/ linux-4.2.3.tar.xz busybox/')
+
+		# Patchen von Quellen
+		elif opt in ("-g", "--exp"):
+			experimentell = True
 
 
 		else:
