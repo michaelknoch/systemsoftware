@@ -197,6 +197,7 @@ def main(argv):
 	stepIdx = 1
 
 	if experimentell:
+		print 'dont do this at home'
 		doNewBuildRootStuff()
 		return
 
