@@ -196,6 +196,10 @@ def main(argv):
 	print opts
 	stepIdx = 1
 
+	if experimentell:
+		doNewBuildRootStuff()
+		return
+
 
 	if checkoutSources:
 		print 'Step ' + str(stepIdx) + ': checkout repo'
