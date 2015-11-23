@@ -32,6 +32,7 @@ echo 0 > /proc/sys/kernel/printk
 #chmod 777 /etc/udhcp/simple.script
 #ls -la /etc/udhcp/simple.script
 #whoami
+sleep 2
 udhcpc -i eth0 -s /etc/udhcp/simple.script
 
 #feuer frei
