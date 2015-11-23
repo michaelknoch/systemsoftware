@@ -93,7 +93,11 @@ def buildKernel():
 	os.system('cd linux-4.2.3 && make ARCH=arm CROSS_COMPILE=/group/SYSO_WS1516/armv6j-rpi-linux-gnueabihf/bin/armv6j-rpi-linux-gnueabihf- -j4')
 
 def copyInitFs():
-	os.system('cp initfs linux-4.2.3/')	
+	os.system('cp initfs linux-4.2.3/')
+
+def generateDtbFiles():
+	# TODO vexpress
+	os.system('cd linux-4.2.3 && make bcm2835-rpi-b.dtb')
 
 def runQemu():
 	# TODO: -dtb
