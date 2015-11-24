@@ -24,7 +24,7 @@ patchSources = False
 compileSources = False
 checkoutSources = False
 startQemu = False
-experimentell = False
+buildrootRun = False
 
 
 destConfigPath = './linux-4.2.3/.config'
@@ -33,11 +33,15 @@ originConfigPath = './.config'
 def initFs():
 	
 
-	#os.system('rm -rf ./initfs')
+	os.system('rm -rf ./initfs')
 	os.system('rm -rf ./initramfs_data.cpio.gz')
 
 	#os.system('/group/SYSO_WS1516/armv6j-rpi-linux-gnueabihf/bin/armv6j-rpi-linux-gnueabihf-gcc -static sysinfo.c -o sysinfo')
 	os.system('make cc=/group/SYSO_WS1516/armv6j-rpi-linux-gnueabihf/bin/armv6j-rpi-linux-gnueabihf-gcc sysinfo')
+
+
+
+	os.makedirs('brImages')
 
 	os.makedirs('initfs/dev')
 	os.makedirs('initfs/bin')
@@ -52,18 +56,20 @@ def initFs():
 	os.makedirs('initfs/usr/share/udhcp')
 	os.system('cp init.sh initfs/init')
 	os.system('cp sysinfo initfs/bin/sysinfo')
-	os.system('cp busybox/busybox initfs/bin/busybox')
+	#os.system('cp busybox/busybox initfs/bin/busybox')
 	os.system('cp udhcp/simple.script initfs/etc/udhcp/simple.script')
 	#os.system('cp -r udhcp/ initfs/usr/share/udhcpc/')
 	#os.system('cp -r udhcp/ initfs/etc/udhcpc/')
+	os.system('cp passwd initfs/etc/')
 	os.system('find ./initfs -type f -exec chmod 777 {} \;')
-	os.system('cd initfs && find . | cpio -o -H newc | gzip > ../initramfs_data.cpio.gz')
-	os.system('mkimage -A arm -O linux -T ramdisk -C none -n "U-Boot RamFS" -d initramfs_data.cpio.gz rootfs.cpio.uboot')
+	#os.system('cd initfs && find . | cpio -o -H newc | gzip > ../initramfs_data.cpio.gz')
+	#os.system('mkimage -A arm -O linux -T ramdisk -C none -n "U-Boot RamFS" -d initramfs_data.cpio.gz rootfs.cpio.uboot')
 	#os.system('rm -rf ./initfs')
+
 
 def doNewBuildRootStuff():
 	os.system('cp -R buildroot/output/images/* ./brImages')
-	os.system('mkimage -A arm -O linux -T ramdisk -C none -n "U-Boot RamFS" -d ./brImages/rootfs.tar ./brImages/rootfs.cpio.uboot')
+	#os.system('mkimage -A arm -O linux -T ramdisk -C none -n "U-Boot RamFS" -d ./brImages/rootfs.tar ./brImages/rootfs.cpio.uboot')
 	os.system('mkimage -A arm -O linux -T script -C none -d ./tftpinit.scr.txt ./brImages/tftpboot.scr')
 	os.system('cp -R ./brImages/* /srv/tftp/rpi/7/')
 
@@ -85,6 +91,11 @@ def downloadAndExtractKernel():
 def downloadAndExtractBusybox():
 	os.system('git clone http://git.busybox.net/busybox')
 	os.system('cd busybox && git checkout 1_24_stable')
+
+def downloadBuildroot():
+	os.system('git clone git://git.buildroot.net/buildroot')
+	os.system('cd buildroot && git checkout 1daa4c95a4bb93621292dd5c9d24285fcddb4026')
+	os.system('rm -rf buildroot/.git')
 
 def makeConfig():
 	global config
@@ -129,6 +140,9 @@ def patchKernel(into=True):
 	os.system('cp ' + _from + ' ' + _to)
 		
 
+def buildBuildroot():
+	os.system('cd buildroot && make source && make')
+
 def buildBusyBox():
 	os.system('cd busybox && make ARCH=arm CROSS_COMPILE=/group/SYSO_WS1516/armv6j-rpi-linux-gnueabihf/bin/armv6j-rpi-linux-gnueabihf-')
 
@@ -140,11 +154,14 @@ def patchPatch():
 	print 'patch -p1 < linux-smsc95xx_allow_mac_setting.patch'
 	os.system('cd linux-4.2.3 && patch -p1 < ../linux-smsc95xx_allow_mac_setting.patch')
 
+def patchBuildroot():
+	os.system('cp .buildroot_config ./buildroot/.config')
+
 def gitCheckoutSources():
 	os.system('git checkout HEAD')
 
 def main(argv):
-	global config, downloadSources, patchSources, compileSources, checkoutSources, useExistingConfig, generateBusyBox, startQemu, experimentell
+	global config, downloadSources, patchSources, compileSources, checkoutSources, useExistingConfig, generateBusyBox, startQemu, buildrootRun
 
 	print 'exporting values'
 	os.system('export ARCH=arm')
@@ -152,7 +169,7 @@ def main(argv):
 	os.system('export QEMU_AUDIO_DRV=none')
 
 	try:
-		opts, args = getopt.getopt(argv, "abcdefg", ["dn", "pa", "cp", "co", "qe", "cleanall", "exp"])
+		opts, args = getopt.getopt(argv, "abcdefg", ["dn", "pa", "cp", "co", "qe", "cleanall", "run"])
 	except getopt.GetoptError:
 		print 'argument parse error'
 		sys.exit(2)
@@ -186,8 +203,8 @@ def main(argv):
 			os.system('rm -rf linux-4.2.3/ linux-4.2.3.tar.xz busybox/')
 
 		# Patchen von Quellen
-		elif opt in ("-g", "--exp"):
-			experimentell = True
+		elif opt in ("-g", "--run"):
+			buildrootAll = True
 
 
 		else:
@@ -196,11 +213,10 @@ def main(argv):
 	print opts
 	stepIdx = 1
 
-	if experimentell:
+	if buildrootRun:
 		print 'dont do this at home'
-		doNewBuildRootStuff()
-		return
-
+		downloadSources = True
+		patchSources = True
 
 	if checkoutSources:
 		print 'Step ' + str(stepIdx) + ': checkout repo'
@@ -209,44 +225,33 @@ def main(argv):
 
 	if downloadSources:
 		print 'Step ' + str(stepIdx) + ': downloading sources'
-		downloadAndExtractKernel()
-		downloadAndExtractBusybox()
+		#downloadAndExtractKernel()
+		#downloadAndExtractBusybox()
+		downloadBuildroot()
 		stepIdx = stepIdx + 1
 
 	if patchSources:
 		print 'Step ' + str(stepIdx) + ': patching sources'
-		patchKernel()
-		patchBusybox()
-		patchPatch()
+		#patchKernel()
+		#patchBusybox()
+		#patchPatch()
+		patchBuildroot()
 		stepIdx = stepIdx + 1
 
 	if compileSources:
 		print 'Step ' + str(stepIdx) + ': compiling sources'
-		buildBusyBox()
+		#buildBusyBox()
 		initFs()
-		buildKernel()
+		buildBuildroot()
+		#buildKernel()
 		stepIdx = stepIdx + 1
 
 	if startQemu:
+		print 'Start qemu, nooooooppppeeeee'
+		return
 		print 'Step ' + str(stepIdx) + ': run qemu'
 		runQemu()
 		stepIdx = stepIdx + 1
-
-	return
-	if generateBusyBox is True:
-		buildBusyBox()
-		return
-
-	if config is True:
-		makeConfig()
-	else:
-		downloadAndExtractKernel()
-		initFs()
-		copyConfigFile(True)
-		build()
-		runQemu()
-
-	
 
 	#initFs()
 	#return
