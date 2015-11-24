@@ -202,7 +202,7 @@ def main(argv):
 
 		# Patchen von Quellen
 		elif opt in ("-g", "--run"):
-			buildrootAll = True
+			buildrootRun = True
 
 
 		else:
