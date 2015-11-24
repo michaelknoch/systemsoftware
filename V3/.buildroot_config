@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Buildroot 2015.11-git-gbd04c13-dirty Configuration
+# Buildroot 2015.11-git-gaeb6e2b Configuration
 #
 BR2_HAVE_DOT_CONFIG=y
 
@@ -1767,7 +1767,7 @@ BR2_PACKAGE_DROPBEAR_SMALL=y
 # BR2_PACKAGE_FASTD is not set
 # BR2_PACKAGE_FCGIWRAP is not set
 # BR2_PACKAGE_FPING is not set
-# BR2_PACKAGE_GESFTPSERVER is not set
+BR2_PACKAGE_GESFTPSERVER=y
 
 #
 # hans needs a toolchain w/ C++
