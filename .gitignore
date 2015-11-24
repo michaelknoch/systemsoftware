@@ -11,3 +11,4 @@ busybox/
 1_24_stable/
 buildroot
 brImages/
+initfs/
