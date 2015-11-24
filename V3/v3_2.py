@@ -34,12 +34,10 @@ def initFs():
 	
 
 	os.system('rm -rf ./initfs')
-	os.system('rm -rf ./initramfs_data.cpio.gz')
+	os.system('rm -rf ./brImages')
 
 	#os.system('/group/SYSO_WS1516/armv6j-rpi-linux-gnueabihf/bin/armv6j-rpi-linux-gnueabihf-gcc -static sysinfo.c -o sysinfo')
 	os.system('make cc=/group/SYSO_WS1516/armv6j-rpi-linux-gnueabihf/bin/armv6j-rpi-linux-gnueabihf-gcc sysinfo')
-
-
 
 	os.makedirs('brImages')
 
