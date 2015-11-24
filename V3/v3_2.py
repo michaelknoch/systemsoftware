@@ -241,6 +241,7 @@ def main(argv):
 		#buildBusyBox()
 		initFs()
 		buildBuildroot()
+		doNewBuildRootStuff()
 		#buildKernel()
 		stepIdx = stepIdx + 1
 
