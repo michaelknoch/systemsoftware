@@ -35,6 +35,8 @@ echo 0 > /proc/sys/kernel/printk
 sleep 2
 udhcpc -i eth0 -s /etc/udhcp/simple.script
 
+/etc/init.d/S50dropbear start
+
 #feuer frei
 ./bin/sysinfo
 
