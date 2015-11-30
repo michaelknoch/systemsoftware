@@ -2,8 +2,8 @@
 
 ## Kernel Größe
 
-    -rwxrwx--- 1 miknoch SYSO_WS1516_17 1375184 Nov 15 15:13 zImage
-    Size: 1,4MB
+    v3_1.py: Size: 1,5MB
+    v3_2.py: Size: 1,5MB
 
 ## Config flags (=y)
 
@@ -418,6 +418,9 @@ CONFIG_ARCH_HAS_SG_CHAIN=y
 
 ```
 
+##Größe RootFS
+	2,4MB
+
 ## Minimal nötige RAM Größe um System in QEMU zu starten
 
-    10m
+    10MB
