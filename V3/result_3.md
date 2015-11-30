@@ -418,7 +418,7 @@ CONFIG_ARCH_HAS_SG_CHAIN=y
 
 ```
 
-##Größe RootFS
+## Größe RootFS
 	2,4MB
 
 ## Minimal nötige RAM Größe um System in QEMU zu starten
