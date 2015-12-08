@@ -11,10 +11,10 @@ static int __init ModInit(void)
 {
 
 	if(register_chrdev(240,DRIVER_NAME,&fops)== 0 ) {
-        printk("Heyhey :)");
+        printk("Heyhey :)\n");
         return 0; // Treiber erfolgreich angemeldet
     }
-    printk("Oh oh :(");
+    printk("Oh oh :(\n");
     return -EIO; // Anmeldung beim Kernel fehlgeschlagen
 }
 
