@@ -12,3 +12,12 @@ busybox/
 buildroot
 brImages/
 initfs/
+
+*.order  
+*.symvers  
+*.ko  
+*.mod.c  
+*.mod.o  
+*.o
+*.cmd
+.tmp_versions
