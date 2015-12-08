@@ -9,7 +9,7 @@ static int __init ModInit(void)
         printk(KERN_ALERT "Hello, world\n");
         return 0;
 }
-
+a
 static void __exit ModExit(void)
 {
         printk(KERN_ALERT "Goodbye, cruel world\n");

@@ -1,10 +1,25 @@
+
+export ARCH=arm
+export CROSS_COMPILE=/group/SYSO_WS1516/armv6j-rpi-linux-gnueabihf/bin/armv6j-rpi-linux-gnueabihf-
+export KDIR=../../../V3/buildroot/output/build/linux-4.2.3
+export KBUILD_VERBOSE=1
+
+NAME=template
+SOURCES=$(NAME).c
+OBJECTS=$(SOURCES:.c=.o)
+TARGET_DIR=/usr/bin/
+
 ifneq ($(KERNELRELEASE),)
-obj-m   := module_skel.o
+obj-m	:= $(OBJECTS)
 
 else
-KDIR    := /lib/modules/$(shell uname -r)/build
-PWD     := $(shell pwd)
+KDIR	:= $(KDIR)
+PWD		:= $(shell pwd)
+
+endif
 
 default:
-        $(MAKE) -C $(KDIR) SUBDIRS=$(PWD) modules
-endif
+	$(MAKE) -C $(KDIR) SUBDIRS=$(PWD) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) modules
+clean:
+	rm -rf *.o *.ko *.mod.c *.symvers *.order
+
