@@ -21,4 +21,5 @@ default:
 	$(MAKE) -C $(KDIR) SUBDIRS=$(PWD) ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) modules
 clean:
 	rm -rf *.o *.ko *.mod.c *.symvers *.order
-
+install:
+	scp $(NAME).ko user@192.168.29.48:$(TARGET_DIR)$(NAME).ko
