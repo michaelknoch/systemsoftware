@@ -246,8 +246,6 @@ def main(argv):
 		stepIdx = stepIdx + 1
 
 	if startQemu:
-		print 'Start qemu, nooooooppppeeeee'
-		return
 		print 'Step ' + str(stepIdx) + ': run qemu'
 		runQemu()
 		stepIdx = stepIdx + 1
