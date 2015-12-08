@@ -11,7 +11,7 @@ static int __init ModInit(void)
 {
 
 	if(register_chrdev(240,DRIVER_NAME,&fops)== 0 ) {
-        printk("Heyhey :)\n");
+        printk("Heyhey ^^\n");
         return 0; // Treiber erfolgreich angemeldet
     }
     printk("Oh oh :(\n");
@@ -21,6 +21,7 @@ static int __init ModInit(void)
 static void __exit ModExit(void)
 {
     unregister_chrdev(240,DRIVER_NAME);
+    printk("byebye, bis bald :)\n");
 
 }
 
