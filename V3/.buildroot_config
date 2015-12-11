@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Buildroot 2015.11-git-gaeb6e2b Configuration
+# Buildroot 2015.11-git-g735190f Configuration
 #
 BR2_HAVE_DOT_CONFIG=y
 
@@ -1710,6 +1710,12 @@ BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT=y
 #
 # BR2_PACKAGE_SHARED_MIME_INFO is not set
 # BR2_PACKAGE_SNOWBALL_INIT is not set
+BR2_PACKAGE_SYSO=y
+
+#
+# Template
+#
+BR2_PACKAGE_TEMPLATE=y
 
 #
 # Networking applications
