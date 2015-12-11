@@ -13,6 +13,9 @@ static dev_t device_number;
 
 static int register_driver( int count, char *name, struct file_operations *fops )
 {
+	
+	int major;
+
 	if( alloc_chrdev_region( &device_number, 0, count, name ) ) {
 		printk("Devicenumber 0x%x not available ...\n", device_number );
 		return -1;
@@ -33,6 +36,9 @@ static int register_driver( int count, char *name, struct file_operations *fops 
 		printk("cdev_add failed ...\n");
 		goto free_cdev;
 	}
+
+	major = MAJOR(device_number);
+	printk("Major number: %d\n", major);
 
 	return 0;
 	
