@@ -1,7 +1,7 @@
 
 #!/bin/sh
 
-dmesg -C
+dmesg -c
 
 # zeigt die Informationen Ihres Moduls mit modinfo
 modinfo $PROG_NAME.ko
