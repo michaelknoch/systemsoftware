@@ -3,7 +3,7 @@
 # TODO: create tar archive
 
 cd modul-src/template/
-tar -cf ../../tars/template.tar *
+tar -cf ../../tars/template-1.0.tar.gz *
 cd -
 
 cd tars
