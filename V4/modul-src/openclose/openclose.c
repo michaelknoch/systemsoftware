@@ -4,7 +4,7 @@
 #include <linux/version.h>
 #include <linux/cdev.h>
 
-#define DRIVER_NAME "template"
+#define DRIVER_NAME "openclose"
 
 static struct file_operations fops;
 static struct cdev *driver_object;
@@ -77,5 +77,5 @@ module_exit(ModExit);
 // Metainformation
 MODULE_AUTHOR("Timo Weiß und Michael Knoch");
 MODULE_LICENSE("GPL");
-MODULE_DESCRIPTION("Just a Modul-Template, without specific functionality.");
+MODULE_DESCRIPTION("Openclose Driver");
 MODULE_SUPPORTED_DEVICE("none");
