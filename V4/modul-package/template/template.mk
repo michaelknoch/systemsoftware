@@ -1,8 +1,9 @@
 ##https://buildroot.org/downloads/manual/manual.html#adding-packages
 
-LIBFOO_VERSION = 1.0
-MODULE_NAME = template
-LIBFOO_SOURCE = $(MODULE_NAME)-$(LIBFOO_VERSION).tar.gz
+TEMPLATE_VERSION = 1.0
+TEMPLATE_NAME = template
+TEMPLATE_SITE_METHOD = file
+TEMPLATE_SITE = $(TEMPLATE_NAME)-$(TEMPLATE_VERSION).tar.gz
 
 
 define TEMPLATE_BUILD_CMDS
@@ -18,7 +19,7 @@ define TEMPLATE_CLEAN_CMDS
 endef
 
 define TEMPLATE_UNINSTALL_TARGET_CMS
-	rm $(TARGET_DIR)/usr/bin/$(MODULE_NAME)
+	rm $(TARGET_DIR)/usr/bin/$(TEMPLATE_NAME)
 endef
 
 $(eval $(generic-package))
