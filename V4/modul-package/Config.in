@@ -2,3 +2,11 @@ config BR2_PACKAGE_SYSO
 	bool "syso"
 	help
 	  All Syso Packages
+
+
+
+if BR2_PACKAGE_SYSO
+	menu "Modules"
+	  source package/syso/template/Config.in
+	endmenu
+endif
