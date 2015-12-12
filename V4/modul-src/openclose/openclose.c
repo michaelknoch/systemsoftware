@@ -9,6 +9,7 @@
 #include <linux/device.h>
 
 #define DRIVER_NAME "openclose"
+#define PROCESS_COUNT 1
 
 
 static int driver_open(struct inode *geraetedatei, struct file *instanz); 
@@ -24,6 +25,9 @@ static struct file_operations fops = {
     .open = driver_open,
     .release = driver_release,
 };
+
+/* makelinux.net/ldd3/chp-5-sect-7 */
+static atomic_t lock = ATOMIC_INIT(PROCESS_COUNT);
 
 static struct cdev *driver_object;
 static dev_t device_number;
@@ -46,9 +50,17 @@ static ssize_t driver_write(struct file *instanz, const char *user, size_t count
 static int driver_open(struct inode *geraetedatei, struct file *instanz) 
 {
 	printk("Open Driver..\n");
+
 	if (MINOR(geraetedatei->i_rdev) == 0) {
 		printk("open from Minor: 0\n");
 	} else {
+
+		if (!atomic_dec_and_test(&lock)) {
+			atomic_inc(&lock);
+			printk("Driver busy!\n");
+			return -EBUSY;
+		}
+
 		printk("open from Minor: 1\n");
 	}
 
@@ -61,6 +73,7 @@ static int driver_release(struct inode *geraetedatei, struct file *instanz)
 	if (MINOR(geraetedatei->i_rdev) == 0) {
 		printk("release from Minor: 0\n");
 	} else {
+		atomic_inc(&lock);
 		printk("release from Minor: 1\n");
 	}
 
