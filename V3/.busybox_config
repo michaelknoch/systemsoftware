@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
 # Busybox version: 1.24.1
-# Tue Dec  8 16:48:24 2015
+# Sat Dec 12 13:02:18 2015
 #
 CONFIG_HAVE_DOT_CONFIG=y
 
@@ -257,7 +257,7 @@ CONFIG_FEATURE_LS_COLOR_IS_DEFAULT=y
 CONFIG_MKDIR=y
 CONFIG_FEATURE_MKDIR_LONG_OPTIONS=y
 CONFIG_MKFIFO=y
-# CONFIG_MKNOD is not set
+CONFIG_MKNOD=y
 CONFIG_MV=y
 CONFIG_FEATURE_MV_LONG_OPTIONS=y
 # CONFIG_NICE is not set
