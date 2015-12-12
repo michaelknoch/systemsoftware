@@ -45,13 +45,25 @@ static ssize_t driver_write(struct file *instanz, const char *user, size_t count
 
 static int driver_open(struct inode *geraetedatei, struct file *instanz) 
 {
-	printk("Driver open Event\n");
+	printk("Open Driver..\n");
+	if (MINOR(geraetedatei->i_rdev) == 0) {
+		printk("open from Minor: 0\n");
+	} else {
+		printk("open from Minor: 1\n");
+	}
+
 	return 0;
 }
 
 static int driver_release(struct inode *geraetedatei, struct file *instanz) 
 {
-	printk("Driver release Event\n");
+	printk("Release Driver..\n");
+	if (MINOR(geraetedatei->i_rdev) == 0) {
+		printk("release from Minor: 0\n");
+	} else {
+		printk("release from Minor: 1\n");
+	}
+
 	return 0;
 }
 
