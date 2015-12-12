@@ -3,20 +3,25 @@
 #include <linux/fs.h>
 #include <linux/version.h>
 #include <linux/cdev.h>
+#include <linux/device.h>
 
 #define DRIVER_NAME "template"
 
-static struct file_operations fops;
+static struct file_operations fops = {
+    .owner=THIS_MODULE,
+};
+
 static struct cdev *driver_object;
 static dev_t device_number;
+struct class *template_class;
 
 
-static int register_driver( int count, char *name, struct file_operations *fops )
+
+static int __init ModInit(void)
 {
-	
 	int major;
 
-	if( alloc_chrdev_region( &device_number, 0, count, name ) ) {
+	if( alloc_chrdev_region( &device_number, 0, 1, DRIVER_NAME ) < 0) {
 		printk("Devicenumber 0x%x not available ...\n", device_number );
 		return -1;
 	}
@@ -28,14 +33,19 @@ static int register_driver( int count, char *name, struct file_operations *fops 
 		goto free_device_number;
 	}
 
-	kobject_set_name(&driver_object->kobj, name );
+	driver_object->ops = &fops;
 	driver_object->owner = THIS_MODULE;
-	
-	cdev_init( driver_object, fops );
-	if( cdev_add( driver_object, device_number, count ) ) {
+
+
+	if( cdev_add( driver_object, device_number, 1 )) {
 		printk("cdev_add failed ...\n");
 		goto free_cdev;
+	} else {
+		printk("cdev add success\n");
 	}
+
+	template_class = class_create(THIS_MODULE, DRIVER_NAME);
+	device_create(template_class, NULL, device_number, NULL, "%s", DRIVER_NAME);
 
 	major = MAJOR(device_number);
 	printk("Major number: %d\n", major);
@@ -47,26 +57,21 @@ free_cdev:
 	driver_object = NULL;
 	
 free_device_number:
-	unregister_chrdev_region( device_number, count );
+	unregister_chrdev_region( device_number, 1 );
 	return -1;
-}
-
-static int __init ModInit(void)
-{
-	printk("trying to init\n"); 
-	if(register_driver(1, DRIVER_NAME, &fops) == 0) {
-		printk("Oh this was so successful\n");
-		return 0;
-	}
-	return -EIO;
 }
 
 static void __exit ModExit(void)
 {
+
+	device_destroy(template_class, device_number);
+	class_destroy(template_class);
+
 	printk("trying to unregister 0x%x\n", device_number);
 	
-	unregister_chrdev_region( device_number, 1 );
 	cdev_del( driver_object );
+	unregister_chrdev_region( device_number, 1 );
+	
 	printk("exiting\n");
 	
 }
