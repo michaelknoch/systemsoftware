@@ -37,6 +37,9 @@ udhcpc -i eth0 -s /etc/udhcp/simple.script
 
 /etc/init.d/S50dropbear start
 
+#Registrieren Sie z.B. mdev als Hotplug-Manager
+echo "/sbin/mdev" > /proc/sys/kernel/hotplug
+
 #feuer frei
 ./bin/sysinfo
 
