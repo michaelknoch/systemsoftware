@@ -11,7 +11,8 @@ define TEMPLATE_BUILD_CMDS
 endef
 
 define TEMPLATE_INSTALL_TARGET_CMDS
-	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) modules_install
+	#$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) modules_install
+	$(INSTALL) -m 0755 -D $(@D)/test_template.sh $(TARGET_DIR)/usr/bin/test_template.sh
 endef
 
 define TEMPLATE_CLEAN_CMDS
