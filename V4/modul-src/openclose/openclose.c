@@ -10,8 +10,11 @@
 
 #define DRIVER_NAME "openclose"
 
-static struct file_operations fops = {
-    .owner=THIS_MODULE,
+static struct file_operations fobs =
+{
+	.owner = THIS_MODULE,
+	.open = driver_open,
+	.release = driver_release
 };
 
 static struct cdev *driver_object;
