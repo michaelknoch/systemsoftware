@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Buildroot 2015.11-git-g5cd509f-dirty Configuration
+# Buildroot 2015.11-git-ge8ddf1b-dirty Configuration
 #
 BR2_HAVE_DOT_CONFIG=y
 
@@ -1724,9 +1724,10 @@ BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT=y
 BR2_PACKAGE_SYSO=y
 
 #
-# Template
+# Verschiedene Sachen
 #
 BR2_PACKAGE_TEMPLATE=y
+BR2_PACKAGE_OPENCLOSE=y
 
 #
 # Networking applications
