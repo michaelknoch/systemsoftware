@@ -10,16 +10,38 @@
 
 #define DRIVER_NAME "openclose"
 
-static struct file_operations fobs =
-{
-	.owner = THIS_MODULE,
-	.open = driver_open,
-	.release = driver_release
+
+static int driver_open(struct inode *geraetedatei, struct file *instanz); 
+static int driver_release(struct inode *geraetedatei, struct file *instanz); 
+
+static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_t *offset);
+static ssize_t driver_write(struct file *instanz, const char *user, size_t count, loff_t *offset);
+
+static struct file_operations fops = {
+	.read = driver_read,
+	.write = driver_write,
+    .owner=THIS_MODULE,
+    .open = driver_open,
+    .release = driver_release,
 };
 
 static struct cdev *driver_object;
 static dev_t device_number;
 struct class *template_class;
+
+
+static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_t *offset) 
+{
+	printk("read\n");
+	return 0;
+}
+
+static ssize_t driver_write(struct file *instanz, const char *user, size_t count, loff_t *offset) 
+{
+	printk("write\n");
+	return 0;
+}
+
 
 static int driver_open(struct inode *geraetedatei, struct file *instanz) 
 {
@@ -29,7 +51,7 @@ static int driver_open(struct inode *geraetedatei, struct file *instanz)
 
 static int driver_release(struct inode *geraetedatei, struct file *instanz) 
 {
-	printk("Driver open Event\n");
+	printk("Driver release Event\n");
 	return 0;
 }
 
