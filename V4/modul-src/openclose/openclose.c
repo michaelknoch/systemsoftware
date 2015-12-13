@@ -9,7 +9,7 @@
 #include <linux/device.h>
 
 #define DRIVER_NAME "openclose"
-#define MINORS_COUNT = 2
+#define MINORS_COUNT 2
 #define PROCESS_COUNT 1
 
 
