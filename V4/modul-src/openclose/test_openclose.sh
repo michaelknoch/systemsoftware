@@ -1,7 +1,7 @@
 
 #!/bin/sh
 
-DRIVER_NAME = openclose
+DRIVER_NAME=openclose
 
 dmesg -c
 
@@ -9,7 +9,7 @@ dmesg -c
 modinfo $DRIVER_NAME.ko
 
 # lädt das Modul
-insmod $DRIVER_NAME.ko
+insmod /usr/bin/$DRIVER_NAME.ko
 
 # zeigt die entspr. Lade Info des Kernel Logs
 dmesg -c
@@ -23,7 +23,7 @@ cat /proc/devices
 major=`tail -1 /proc/devices | cut -f1 -d" "`
 
 #create device with minor 1
-mknod -m 622 /dev/openclose1 c $major 1
+mknod -m 622 /dev/opencloseminor c $major 1
 
 /usr/bin/access
 
