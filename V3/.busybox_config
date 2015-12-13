@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
 # Busybox version: 1.24.1
-# Sat Dec 12 13:02:18 2015
+# Sun Dec 13 17:26:29 2015
 #
 CONFIG_HAVE_DOT_CONFIG=y
 
@@ -452,7 +452,7 @@ CONFIG_INIT=y
 # CONFIG_FEATURE_KILL_REMOVED is not set
 CONFIG_FEATURE_KILL_DELAY=0
 # CONFIG_FEATURE_INIT_SCTTY is not set
-# CONFIG_FEATURE_INIT_SYSLOG is not set
+CONFIG_FEATURE_INIT_SYSLOG=y
 # CONFIG_FEATURE_EXTRA_QUIET is not set
 # CONFIG_FEATURE_INIT_COREDUMPS is not set
 # CONFIG_FEATURE_INITRD is not set
