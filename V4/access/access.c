@@ -2,23 +2,29 @@
 #include <stdio.h>
 #include <errno.h>
 #include <pthread.h>
-#include <time.h>
 #include <fcntl.h>
 #include <unistd.h>
 
 #define THREAD_COUNT 5
 #define DEVICE_NAME "/dev/openclose"
+#define NANO_TO_MS 1000
 
+/* ms to sleep */
+unsigned int sleepTime = 10;
 
 struct thread_meta {
 	int thread_id;
 	char *device;
 };
 
+int usleep(unsigned int);
+
 void *open_device(void *args) 
 {
 	
 	int fd;
+	char buffer[256];
+
 	struct thread_meta *meta = (struct thread_meta *) args;
 	printf("Thread %d started\n", meta->thread_id);
 	
@@ -28,6 +34,16 @@ void *open_device(void *args)
 		fprintf(stderr, "Opening Error!\n");
 		perror("open");
 	}
+
+	/* perform read */
+	if (read(fd, buffer, 256) == -1) {
+		fprintf(stderr, "read Error!\n");
+	} else {
+		printf("Read success. ThreadID: %d\n", meta->thread_id)
+	}
+
+
+	usleep(NANO_TO_MS * sleepTime);
 
 	if (close(fd) == -1) {
 		fprintf(stderr, "Closing Error!\n");
