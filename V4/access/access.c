@@ -4,23 +4,25 @@
 #include <pthread.h>
 #include <time.h>
 #include <fcntl.h>
+#include <unistd.h>
 
 #define THREAD_COUNT 5
+#define DEVICE_NAME "/dev/openclose"
 
 
 struct thread_meta {
 	int thread_id;
-	char *device_name;
+	char *device;
 };
 
 void *open_device(void *args) 
 {
 	
 	int fd;
-
 	struct thread_meta *meta = (struct thread_meta *) args;
-	fd = open(meta->device_name, O_RDONLY);
+	printf("Thread %d started\n", meta->thread_id);
 	
+	fd = open(meta->device, O_RDONLY);
 	if (fd < 0) 
 	{
 		fprintf(stderr, "Opening Error!\n");
@@ -61,8 +63,10 @@ int main()
 	for (i = 0; i < THREAD_COUNT; i++) 
 	{
 		thread[i].thread_id = i;
+		thread[i].device = DEVICE_NAME;
 		pthread_create(&threads[i], &attr[i], open_device, (void *) &thread[i]);
 	}
+	printf("%d Threads created\n", THREAD_COUNT);
 	
 
 	/* join threads */ 
@@ -71,6 +75,8 @@ int main()
 		pthread_join(threads[i], NULL);
 		pthread_attr_destroy (&attr[i]);
 	}
+
+	printf("Threads joined\n");
 
 
 	return 0;
