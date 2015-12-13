@@ -39,7 +39,7 @@ void *open_device(void *args)
 	if (read(fd, buffer, 256) == -1) {
 		fprintf(stderr, "read Error!\n");
 	} else {
-		printf("Read success. ThreadID: %d\n", meta->thread_id)
+		printf("Read success. ThreadID: %d\n", meta->thread_id);
 	}
 
 
