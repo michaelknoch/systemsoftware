@@ -6,6 +6,7 @@
 #include <linux/device.h>
 
 #define DRIVER_NAME "template"
+#define MINORS_COUNT 1
 
 static struct file_operations fops = {
     .owner=THIS_MODULE,
@@ -21,7 +22,7 @@ static int __init ModInit(void)
 {
 	int major;
 
-	if( alloc_chrdev_region( &device_number, 0, 1, DRIVER_NAME ) < 0) {
+	if( alloc_chrdev_region( &device_number, 0, MINORS_COUNT, DRIVER_NAME ) < 0) {
 		printk("Devicenumber 0x%x not available ...\n", device_number );
 		return -1;
 	}
@@ -37,7 +38,7 @@ static int __init ModInit(void)
 	driver_object->owner = THIS_MODULE;
 
 
-	if( cdev_add( driver_object, device_number, 1 )) {
+	if( cdev_add( driver_object, device_number, MINORS_COUNT )) {
 		printk("cdev_add failed ...\n");
 		goto free_cdev;
 	} else {
