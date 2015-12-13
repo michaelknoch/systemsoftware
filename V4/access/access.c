@@ -64,14 +64,8 @@ int main()
 	/* join threads */ 
 	for(i = 0; i < THREAD_COUNT; i++) 
 	{
-
 		pthread_join(threads[i], NULL);
-
-		if (pthread_attr_destroy (&attr[i]) == -1)
-		{
-			perror ("error in pthread_attr_init");
-			exit (1);
-		}
+		pthread_attr_destroy (&attr[i]);
 	}
 
 
