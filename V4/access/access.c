@@ -26,6 +26,10 @@ void *open_device(void *args)
 		fprintf(stderr, "Opening Error!\n");
 	}
 
+	if (close(fd) == -1) {
+		fprintf(stderr, "Closing Error!\n");
+	}
+
 	pthread_exit(NULL);
 }
 
