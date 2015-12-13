@@ -2,8 +2,10 @@ CC = /group/SYSO_WS1516/armv6j-rpi-linux-gnueabihf/bin/armv6j-rpi-linux-gnueabih
 CFLAGS = -g -W -Wall -ansi -static -pedantic
 LDFLAGS = -lpthread
 
-TARGET = access
+NAME = access
+TARGET = $(NAME)
 OBJECTS = $(TARGET).o
+TARGET_DIR=/usr/bin/
 
 .PHONY: all clean
 
@@ -16,4 +18,4 @@ clean:
 	$(RM) $(TARGET) $(TARGET).o
 
 install:
-	scp $(NAME) user@192.168.29.48:$(TARGET_DIR)$(NAME)
+	scp $(TARGET) user@192.168.29.48:$(TARGET_DIR)$(NAME)
