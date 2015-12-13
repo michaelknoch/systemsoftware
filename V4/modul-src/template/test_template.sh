@@ -1,13 +1,15 @@
 
 #!/bin/sh
 
+DRIVER_NAME = template
+
 dmesg -c
 
 # zeigt die Informationen Ihres Moduls mit modinfo
-modinfo $PROG_NAME.ko
+modinfo $DRIVER_NAME.ko
 
 # lädt das Modul
-insmod $PROG_NAME.ko
+insmod $DRIVER_NAME.ko
 
 # zeigt die entspr. Lade Info des Kernel Logs
 dmesg -c
@@ -16,7 +18,7 @@ dmesg -c
 cat /proc/devices
 
 # entlädt das Modul
-rmmod $PROG_NAME
+rmmod $DRIVER_NAME
 
 # zeigt die entspr. Entlade Info des Kernel Logs
 dmesg -c
