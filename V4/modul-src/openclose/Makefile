@@ -23,3 +23,4 @@ clean:
 	rm -rf *.o *.ko *.mod.c *.symvers *.order
 install:
 	scp $(NAME).ko user@192.168.29.48:$(TARGET_DIR)$(NAME).ko
+	scp test_$(NAME).sh user@192.168.29.48:$(TARGET_DIR)test_$(NAME).sh

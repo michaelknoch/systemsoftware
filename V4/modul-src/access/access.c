@@ -5,7 +5,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#define THREAD_COUNT 5
+#define THREAD_COUNT 10
 #define DEVICE_NAME "/dev/openclose"
 #define DEVICE_NAME_MINOR "/dev/opencloseminor"
 #define NANO_TO_MS 1000
@@ -32,30 +32,31 @@ void *open_device(void *args)
 	fd = open(meta->device, O_RDWR);
 	if (fd < 0) 
 	{
-		fprintf(stderr, "Opening Error!\n");
-		perror("open");
+		fprintf(stderr, "T%d: opening Error!\n", meta->thread_id);
+		pthread_exit(NULL);
+	} else {
+		printf("T%d: open success", meta->thread_id);
 	}
 
 	/* perform read */
 	if (read(fd, buffer, 256) == -1) {
-		fprintf(stderr, "read Error!\n");
+		fprintf(stderr, "T:%d read Error!\n", meta->thread_id);
 	} else {
-		printf("Read success. ThreadID: %d\n", meta->thread_id);
+		printf("T%d: read success\n", meta->thread_id);
 	}
 
 	usleep(NANO_TO_MS * sleepTime);
 
 	/* perform write */
-	if (write(fd, buffer, 256) == -1) {
+	/*if (write(fd, buffer, 256) == -1) {
 		fprintf(stderr, "write Error!\n");
 	} else {
 		printf("Write success. ThreadID: %d\n", meta->thread_id);
-	}
+	}*/
 
 
 	if (close(fd) == -1) {
-		fprintf(stderr, "Closing Error!\n");
-		perror("close");
+		fprintf(stderr, "T%d: Closing Error!\n", meta->thread_id);
 	}
 
 	pthread_exit(NULL);
@@ -113,7 +114,7 @@ int main()
 		pthread_attr_destroy (&attr[i]);
 	}
 
-	printf("Threads joined\n");
+	printf("%d Threads joined\n", THREAD_COUNT);
 
 
 	return 0;
