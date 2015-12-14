@@ -9,6 +9,8 @@ if BR2_PACKAGE_SYSO
         source "package/syso/template/Config.in"
 		source "package/syso/openclose/Config.in"
 		source "package/syso/access/Config.in"
+		source "package/syso/mynull/Config.in"
+		source "package/syso/myzero/Config.in"
     endmenu
 
 endif
