@@ -17,6 +17,15 @@ dmesg -c
 # zeigt die entspr. Infos aus /proc/devices an.
 cat /proc/devices
 
+# get newest major
+#http://stackoverflow.com/questions/4651437/how-to-set-a-bash-variable-equal-to-the-output-from-a-command
+#http://stackoverflow.com/questions/4168371/how-can-i-remove-all-text-after-a-character-in-bash
+major=`tail -1 /proc/devices | cut -f1 -d" "`
+
+#create device with minor 1
+echo mknod -m 622 /dev/mynullminor c $major 1
+mknod -m 622 /dev/mynullminor c $major 1
+
 # entlädt das Modul
 rmmod $DRIVER_NAME
 
