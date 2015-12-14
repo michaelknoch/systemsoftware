@@ -7,10 +7,10 @@ DRIVER_PATH=/lib/modules/4.2.3/extra
 dmesg -c
 
 # zeigt die Informationen Ihres Moduls mit modinfo
-modinfo $DRIVER_NAME.ko
+modinfo $DRIVER_PATH/$DRIVER_NAME.ko
 
 # lädt das Modul
-insmod $DRIVER_NAME/$DRIVER_NAME.ko
+insmod $DRIVER_PATH/$DRIVER_NAME.ko
 
 # zeigt die entspr. Lade Info des Kernel Logs
 dmesg -c
