@@ -34,6 +34,9 @@ def initFs():
 	
 
 	os.system('rm -rf ./initfs')
+
+	# bs
+	os.system('rm -rf ./buildroot/output/target/etc/init.d/S00init')
 	os.system('rm -rf ./brImages')
 
 	#os.system('/group/SYSO_WS1516/armv6j-rpi-linux-gnueabihf/bin/armv6j-rpi-linux-gnueabihf-gcc -static sysinfo.c -o sysinfo')
@@ -45,6 +48,7 @@ def initFs():
 	os.makedirs('initfs/bin')
 	os.makedirs('initfs/sbin')
 	os.makedirs('initfs/etc/udhcp')
+	os.makedirs('initfs/etc/init.d')
 	os.makedirs('initfs/tmp')
 	os.makedirs('initfs/var')
 	os.makedirs('initfs/sys')
@@ -52,7 +56,7 @@ def initFs():
 	os.makedirs('initfs/proc')
 	os.makedirs('initfs/usr/bin')
 	os.makedirs('initfs/usr/share/udhcp')
-	os.system('cp init.sh initfs/init')
+	os.system('cp init.sh initfs/etc/init.d/S90init')
 	os.system('cp sysinfo initfs/bin/sysinfo')
 	#os.system('cp busybox/busybox initfs/bin/busybox')
 	os.system('cp udhcp/simple.script initfs/etc/udhcp/simple.script')
