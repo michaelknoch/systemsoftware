@@ -38,6 +38,7 @@ def initFs():
 	# bs
 	os.system('rm -rf ./buildroot/output/target/etc/init.d/S00init')
 	os.system('rm -rf ./brImages')
+	os.system('rm -rf buildroot/output/build/mynull-1.0/ buildroot/output/build/myzero-1.0/ buildroot/output/build/openclose-1.0/ buildroot/output/build/template-1.0/ buildroot/output/build/access-1.0/')
 
 	#os.system('/group/SYSO_WS1516/armv6j-rpi-linux-gnueabihf/bin/armv6j-rpi-linux-gnueabihf-gcc -static sysinfo.c -o sysinfo')
 	os.system('make cc=/group/SYSO_WS1516/armv6j-rpi-linux-gnueabihf/bin/armv6j-rpi-linux-gnueabihf-gcc sysinfo')
@@ -51,6 +52,7 @@ def initFs():
 	os.makedirs('initfs/etc/init.d')
 	os.makedirs('initfs/tmp')
 	os.makedirs('initfs/var')
+	os.makedirs('initfs/var/log')
 	os.makedirs('initfs/sys')
 	os.makedirs('initfs/dev/pts')
 	os.makedirs('initfs/proc')
@@ -58,6 +60,8 @@ def initFs():
 	os.makedirs('initfs/usr/share/udhcp')
 	os.system('cp init.sh initfs/etc/init.d/S90init')
 	os.system('cp sysinfo initfs/bin/sysinfo')
+
+	os.system('touch initfs/var/log/kern.log')
 	#os.system('cp busybox/busybox initfs/bin/busybox')
 	os.system('cp udhcp/simple.script initfs/etc/udhcp/simple.script')
 	#os.system('cp -r udhcp/ initfs/usr/share/udhcpc/')
@@ -125,7 +129,7 @@ def generateDtbFiles():
 
 def runQemu():
 	# TODO: -dtb
-	os.system('qemu-system-arm -M vexpress-a9 -kernel ./buildroot/output/images/zImage -nographic -serial stdio -dtb ./buildroot/output/images/vexpress-v2p-ca9.dtb -monitor telnet:127.0.0.1:2222,server,nowait -append "console=ttyAMA0" -initrd ./buildroot/output/images/rootfs.cpio.gz -net nic,macaddr=00:00:00:00:F1:01,vlan=0 -net vde,sock="/tmp/vde2-tap0.ctl",vlan=0')
+	os.system('qemu-system-arm -M vexpress-a9 -kernel ./buildroot/output/images/zImage -nographic -serial stdio -dtb ./buildroot/output/images/vexpress-v2p-ca9.dtb -monitor telnet:127.0.0.1:2221,server,nowait -append "console=ttyAMA0" -initrd ./buildroot/output/images/rootfs.cpio.gz -net nic,macaddr=00:00:00:00:F1:02,vlan=0 -net vde,sock="/tmp/vde2-tap0.ctl",vlan=0')
 
 def patchKernel(into=True):
 	# if into True copy config file from current directory into linux-4.2.3
