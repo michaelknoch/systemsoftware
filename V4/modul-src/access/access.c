@@ -105,6 +105,7 @@ void read_test() {
 		if (fd < 0) 
 		{
 			fprintf(stderr, "opening Error!\n");
+			return;
 		}
 
 		/* perform read */
@@ -143,6 +144,7 @@ void write_test() {
 		if (fd < 0) 
 		{
 			fprintf(stderr, "opening Error!\n");
+			return;
 		}
 
 		/* perform write */
