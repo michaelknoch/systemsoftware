@@ -63,6 +63,8 @@ def initFs():
 	#os.system('cp -r udhcp/ initfs/usr/share/udhcpc/')
 	#os.system('cp -r udhcp/ initfs/etc/udhcpc/')
 	os.system('cp passwd initfs/etc/')
+	os.system('cp syslog.conf initfs/etc/syslog.conf')
+
 	os.system('find ./initfs -type f -exec chmod 777 {} \;')
 	#os.system('cd initfs && find . | cpio -o -H newc | gzip > ../initramfs_data.cpio.gz')
 	#os.system('mkimage -A arm -O linux -T ramdisk -C none -n "U-Boot RamFS" -d initramfs_data.cpio.gz rootfs.cpio.uboot')
