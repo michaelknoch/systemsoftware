@@ -23,6 +23,7 @@ cat /proc/devices
 major=`tail -1 /proc/devices | cut -f1 -d" "`
 
 #create device with minor 1
+echo mknod -m 622 /dev/opencloseminor c $major 1
 mknod -m 622 /dev/opencloseminor c $major 1
 
 /usr/bin/access
