@@ -18,16 +18,20 @@ mount -t tmpfs none /tmp
 mount -t sysfs none /sys
 mount -t proc proc /proc
 
-mount -t devpts devpts /dev/pts
+#mount -t devpts devpts /dev/pts
 
 
 /bin/chown 0.0 /bin/busybox
 /bin/chmod 4755 /bin/busybox
 
+
+#Registrieren Sie z.B. mdev als Hotplug-Manager
+echo "/sbin/mdev" > /proc/sys/kernel/hotplug
+
 mdev -s
 
 # Set loglevel to "Emergency messages, system is about to crash or is unstable"
-echo 0 > /proc/sys/kernel/printk
+#echo 0 > /proc/sys/kernel/printk
 
 #chmod 777 /etc/udhcp/simple.script
 #ls -la /etc/udhcp/simple.script
@@ -35,10 +39,7 @@ echo 0 > /proc/sys/kernel/printk
 sleep 2
 udhcpc -i eth0 -s /etc/udhcp/simple.script
 
-/etc/init.d/S50dropbear start
-
-#Registrieren Sie z.B. mdev als Hotplug-Manager
-echo "/sbin/mdev" > /proc/sys/kernel/hotplug
+#/etc/init.d/S50dropbear start
 
 #feuer frei
 ./bin/sysinfo
@@ -48,8 +49,8 @@ echo "/sbin/mdev" > /proc/sys/kernel/hotplug
 #ifconfig
 #echo 'asd2'
 
-telnetd 192.168.26.48 -l /bin/sh
+#telnetd 192.168.26.48 -l /bin/sh
 
-setsid cttyhack /bin/busybox sh
+#setsid cttyhack /bin/busybox sh
 
 
