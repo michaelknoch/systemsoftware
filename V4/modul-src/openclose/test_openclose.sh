@@ -29,7 +29,7 @@ mknod -m 622 /dev/opencloseminor c $major 1
 
 
 # run access
-./access -o -t 500
+./usr/bin/access -o -t 500
 
 # entlädt das Modul
 rmmod $DRIVER_NAME
