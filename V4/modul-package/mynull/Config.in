@@ -1,0 +1,5 @@
+config BR2_PACKAGE_MYNULL
+	bool "mynull"
+	help
+	  This is a comment that explains what mynull is.
+	  http://tucktuck.org/tucktucktemplate/
