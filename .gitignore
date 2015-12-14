@@ -22,3 +22,6 @@ initfs/
 *.cmd
 .tmp_versions
 
+V4/modul-src/access/access
+V4/modul-src/myzeri/myzero
+V4/modul-src/mynull/mynull
