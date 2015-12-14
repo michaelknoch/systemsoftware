@@ -1,0 +1,5 @@
+config BR2_PACKAGE_OPENCLOSE
+	bool "openclose"
+	help
+	  This is a comment that explains what openclose is.
+	  http://tucktuck.org/tucktucktemplate/
