@@ -19,7 +19,7 @@ struct class *template_class;
 
 static ssize_t driver_write(struct file *instanz, const char *user, size_t count, loff_t *offset) 
 {
-	printk("write\n");
+	printk("verschlucken, gluck gluck\n");
 	return 0;
 }
 
