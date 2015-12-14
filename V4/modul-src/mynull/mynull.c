@@ -8,8 +8,15 @@
 #define DRIVER_NAME "mynull"
 #define MINORS_COUNT 1
 
+static int driver_open(struct inode *geraetedatei, struct file *instanz); 
+static int driver_release(struct inode *geraetedatei, struct file *instanz); 
+static ssize_t driver_write(struct file *instanz, const char *user, size_t count, loff_t *offset);
+
 static struct file_operations fops = {
+	.write = driver_write,
     .owner=THIS_MODULE,
+    .open = driver_open,
+    .release = driver_release,
 };
 
 static struct cdev *driver_object;
@@ -20,6 +27,31 @@ struct class *template_class;
 static ssize_t driver_write(struct file *instanz, const char *user, size_t count, loff_t *offset) 
 {
 	printk("verschlucken, gluck gluck\n");
+	return 0;
+}
+
+static int driver_open(struct inode *geraetedatei, struct file *instanz) 
+{
+	printk("Open Driver..\n");
+
+	if (MINOR(geraetedatei->i_rdev) == 0) {
+		printk("open from Minor: 0\n");
+	} else {
+		printk("open from Minor: 1\n");
+	}
+
+	return 0;
+}
+
+static int driver_release(struct inode *geraetedatei, struct file *instanz) 
+{
+	printk("Release Driver..\n");
+	if (MINOR(geraetedatei->i_rdev) == 0) {
+		printk("release from Minor: 0\n");
+	} else {
+		printk("release from Minor: 1\n");
+	}
+
 	return 0;
 }
 
