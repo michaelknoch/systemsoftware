@@ -3,7 +3,7 @@ export ARCH=arm
 export CROSS_COMPILE=/group/SYSO_WS1516/armv6j-rpi-linux-gnueabihf/bin/armv6j-rpi-linux-gnueabihf-
 export KDIR=../../../V3/buildroot/output/build/linux-4.2.3
 
-NAME=openclose
+NAME=mynull
 SOURCES=$(NAME).c
 OBJECTS=$(SOURCES:.c=.o)
 TARGET_DIR=/usr/bin/
@@ -23,4 +23,3 @@ clean:
 	rm -rf *.o *.ko *.mod.c *.symvers *.order
 install:
 	scp $(NAME).ko user@192.168.29.48:$(TARGET_DIR)$(NAME).ko
-	scp test_$(NAME).sh user@192.168.29.48:$(TARGET_DIR)test_$(NAME).sh
