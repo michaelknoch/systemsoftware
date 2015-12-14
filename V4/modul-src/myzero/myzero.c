@@ -26,13 +26,24 @@ struct class *template_class;
 
 static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_t *offset) 
 {
+	char *minorzero = "0\n";
+	char *minorone = "hello world\n";
+	unsigned long notcopied;
+	size_t to_copy;
+
 	/* http://stackoverflow.com/questions/12982318/linux-device-driver-is-it-possible-to-get-the-minor-number-using-a-file-descrip*/
 	if (iminor(instanz->f_path.dentry->d_inode) == 0) {
-		copy_to_user(user, "0\n", 2);
+		printk("read from minor 0\n");
+		to_copy =  min(strlen(minorzero) + 1, count);
+		notcopied = copy_to_user(user, minorzero, to_copy);
 	} else {
-		copy_to_user(user, "hello world\n", 12);
+		printk("read from minor 1\n");
+		to_copy =  min(strlen(minorone) + 1, count);
+		notcopied = copy_to_user(user, minorone, to_copy);
 	}
-	return 0;
+	printk("not copied: %lu\n", notcopied);
+	
+	return to_copy - notcopied;
 }
 
 static int driver_open(struct inode *geraetedatei, struct file *instanz) 
