@@ -87,35 +87,80 @@ void *open_device(void *args)
 }
 
 void read_test() {
-	int fd;
-	char buffer[256];
+	int i;
 
-	fd = open("/dev/myzero", O_RDONLY);
-
-	if (fd < 0) 
+	for (i = 0; i < 10; ++i)
 	{
-		fprintf(stderr, "opening Error!\n");
-		
-	} else {
-		printf("open success");
+
+		int fd;
+		char buffer[256];
+
+		if(i%2 == 0) {
+
+			fd = open("/dev/myzero", O_RDONLY);
+		} else {
+			fd = open("/dev/myzerominor", O_RDONLY);
+		}
+
+		if (fd < 0) 
+		{
+			fprintf(stderr, "opening Error!\n");
+		}
+
+		/* perform read */
+		if (read(fd, buffer, 256) == -1) {
+			fprintf(stderr, "read Error!\n");
+		} else {
+			printf("read success\n");
+			printf(buffer);
+		}
+
+		if (options->time_to_wait_read_or_write_was_set)
+		{
+			usleep(NANO_TO_MS * options->time_to_wait_read_or_write);
+		}
+		if (close(fd) == -1) {
+			fprintf(stderr, "Closing Error!\n");
+		} else {
+			printf("close success\n");
+		}
 	}
-
-
-	/* perform read */
-	if (read(fd, buffer, 256) == -1) {
-		fprintf(stderr, "read Error!\n");
-	} else {
-		printf("read success\n");
-		printf(buffer);
-	}
-
-	if (options->time_to_wait_read_or_write_was_set)
-	{
-		usleep(NANO_TO_MS * options->time_to_wait_read_or_write);
-	}
-
 
 }
+
+void write_test() {
+	int i;
+
+	for (i = 0; i < 10; ++i)
+	{
+
+		int fd;
+		char buffer[6] = "hell\n";
+
+		
+		fd = open("/dev/mynull", O_WRONLY);
+		
+		if (fd < 0) 
+		{
+			fprintf(stderr, "opening Error!\n");
+		}
+
+		/* perform write */
+		if (write(fd, buffer, 6) == -1) {
+			fprintf(stderr, "write Error!\n");
+		} else {
+			printf("write success\n");
+			printf(buffer);
+		}
+
+		if (options->time_to_wait_read_or_write_was_set)
+		{
+			usleep(NANO_TO_MS * options->time_to_wait_read_or_write);
+		}
+	}
+
+}
+
 
 int main(int argc, char *argv[]) 
 {
@@ -128,7 +173,7 @@ int main(int argc, char *argv[])
 	
 	options = malloc (sizeof (struct opts));
 
-	while(-1 != (opt = getopt (argc, argv, "d:oct:e:n:m:hvrw:"))) {
+	while(-1 != (opt = getopt (argc, argv, "d:ot:rw"))) {
 		switch(opt){
 			case 'r':
 				options->read = TRUE;
@@ -139,6 +184,7 @@ int main(int argc, char *argv[])
 				break;
 			case 'w':
 				options->write = TRUE;
+				break;
 			case 't':
 				options->time_to_wait_open_was_set = TRUE;
 				options->time_to_wait_open = atoi(optarg);
@@ -212,6 +258,9 @@ int main(int argc, char *argv[])
 	if (options->read) 
 	{
 		read_test();
+	}
+	if (options->write) {
+		write_test();
 	}
 
 
