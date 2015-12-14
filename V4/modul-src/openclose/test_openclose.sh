@@ -2,6 +2,7 @@
 #!/bin/sh
 
 DRIVER_NAME=openclose
+DRIVER_PATH=/lib/modules/4.2.3/extra
 
 dmesg -c
 
@@ -9,7 +10,7 @@ dmesg -c
 modinfo $DRIVER_NAME.ko
 
 # lädt das Modul
-insmod /usr/bin/$DRIVER_NAME.ko
+insmod $DRIVER_NAME/$DRIVER_NAME.ko
 
 # zeigt die entspr. Lade Info des Kernel Logs
 dmesg -c
@@ -26,7 +27,9 @@ major=`tail -1 /proc/devices | cut -f1 -d" "`
 echo mknod -m 622 /dev/opencloseminor c $major 1
 mknod -m 622 /dev/opencloseminor c $major 1
 
-/usr/bin/access
+
+# run access
+./access -o -t 500
 
 # entlädt das Modul
 rmmod $DRIVER_NAME
