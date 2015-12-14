@@ -21,4 +21,4 @@ initfs/
 *.o
 *.cmd
 .tmp_versions
-access
+
