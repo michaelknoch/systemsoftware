@@ -52,7 +52,7 @@ static int driver_open(struct inode *geraetedatei, struct file *instanz)
 {
 	printk("Open Driver..\n");
 
-	if (MINOR(geraetedatei->i_rdev) == 0) {
+	if (iminor(geraetedatei) == 0) {
 		printk("open from Minor: 0\n");
 	} else {
 
@@ -71,7 +71,7 @@ static int driver_open(struct inode *geraetedatei, struct file *instanz)
 static int driver_release(struct inode *geraetedatei, struct file *instanz) 
 {
 	printk("Release Driver..\n");
-	if (MINOR(geraetedatei->i_rdev) == 0) {
+	if (iminor(geraetedatei) == 0) {
 		printk("release from Minor: 0\n");
 	} else {
 		atomic_inc(&lock);
