@@ -18,4 +18,4 @@ clean:
 	$(RM) $(TARGET) $(TARGET).o
 
 install:
-	scp $(TARGET) user@192.168.29.48:$(TARGET_DIR)$(NAME)
+	scp $(TARGET) user@192.168.29.49:$(TARGET_DIR)$(NAME)
