@@ -19,7 +19,7 @@ dmesg -c
 cat /proc/devices
 
 # run access
-./usr/bin/access -w -d 500
+/usr/bin/access -w -d 500
 
 # entlädt das Modul
 rmmod $DRIVER_NAME
