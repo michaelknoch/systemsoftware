@@ -6,7 +6,7 @@ export KDIR=../../../V3/buildroot/output/build/linux-4.2.3
 NAME=mynull
 SOURCES=$(NAME).c
 OBJECTS=$(SOURCES:.c=.o)
-TARGET_DIR=/usr/bin/
+TARGET_DIR=/lib/modules/4.2.3/extra/
 
 ifneq ($(KERNELRELEASE),)
 obj-m	:= $(OBJECTS)
@@ -22,4 +22,4 @@ default:
 clean:
 	rm -rf *.o *.ko *.mod.c *.symvers *.order
 install:
-	scp $(NAME).ko user@192.168.29.48:$(TARGET_DIR)$(NAME).ko
+	scp $(NAME).ko user@192.168.29.49:$(TARGET_DIR)$(NAME).ko

@@ -5,7 +5,7 @@ LDFLAGS = -lpthread
 NAME = access
 TARGET = $(NAME)
 OBJECTS = $(TARGET).o
-TARGET_DIR=/usr/bin/
+TARGET_DIR=/lib/modules/4.2.3/extra/
 
 .PHONY: all clean
 
