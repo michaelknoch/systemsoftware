@@ -33,5 +33,9 @@ mknod -m 622 /dev/myzerominor c $major 1
 # run access
 /usr/bin/access -r -d 500
 
+rm /dev/myzerominor
+rmmod myzero
+
+
 # zeigt die entspr. Entlade Info des Kernel Logs
 dmesg -c
