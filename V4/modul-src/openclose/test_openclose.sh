@@ -32,7 +32,9 @@ mknod -m 622 /dev/opencloseminor c $major 1
 /usr/bin/access -o -t 500
 
 # entlädt das Modul
+rm /dev/opencloseminor
 rmmod $DRIVER_NAME
+
 
 # zeigt die entspr. Entlade Info des Kernel Logs
 dmesg -c
