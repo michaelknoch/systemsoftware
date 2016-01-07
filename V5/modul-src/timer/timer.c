@@ -4,9 +4,12 @@
 #include <linux/version.h>
 #include <linux/cdev.h>
 #include <linux/device.h>
+#include <linux/timer.h>
 
 #define DRIVER_NAME "timer"
 #define MINORS_COUNT 1
+
+static struct timer_list mytimer;
 
 static struct file_operations fops = {
     .owner=THIS_MODULE,
@@ -16,7 +19,12 @@ static struct cdev *driver_object;
 static dev_t device_number;
 struct class *template_class;
 
-
+static void inc_count(unsigned long arg)
+{
+    printk("inc_count called (%ld)...\n", mytimer.expires );
+    mytimer.expires = jiffies + (2*HZ); // 2 second
+    add_timer( &mytimer );
+}
 
 static int __init ModInit(void)
 {
@@ -51,6 +59,12 @@ static int __init ModInit(void)
 	major = MAJOR(device_number);
 	printk("Major number: %d\n", major);
 
+	init_timer( &mytimer );
+    mytimer.function = inc_count;
+    mytimer.data = 0;
+    mytimer.expires = jiffies + (2*HZ); // 2 second
+    add_timer( &mytimer );
+
 	return 0;
 	
 free_cdev:
@@ -73,6 +87,16 @@ static void __exit ModExit(void)
 	cdev_del( driver_object );
 	unregister_chrdev_region( device_number, 1 );
 	
+	if( timer_pending( &mytimer ) ) {
+        printk("Timer ist aktiviert ...\n");
+	}
+    if( del_timer_sync( &mytimer ) ) {
+        printk("Aktiver Timer deaktiviert\n");
+    }
+    else {
+        printk("Kein Timer aktiv\n");
+    }
+
 	printk("exiting\n");
 	
 }
