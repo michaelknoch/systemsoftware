@@ -22,4 +22,4 @@ default:
 clean:
 	rm -rf *.o *.ko *.mod.c *.symvers *.order
 install:
-	scp $(NAME).ko user@192.168.29.49:$(TARGET_DIR)$(NAME).ko
+	scp $(NAME).ko user@192.168.29.48:$(TARGET_DIR)$(NAME).ko
