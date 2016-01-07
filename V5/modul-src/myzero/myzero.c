@@ -35,16 +35,27 @@ static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_
 	char *minorone = "hello world\n";
 	unsigned long notcopied;
 	size_t to_copy;
+	struct _instance_data *iptr;
 
 	/* http://stackoverflow.com/questions/12982318/linux-device-driver-is-it-possible-to-get-the-minor-number-using-a-file-descrip*/
 	if (iminor(instanz->f_path.dentry->d_inode) == 0) {
 		printk("read from minor 0\n");
-		to_copy =  min(strlen(minorzero) + 1, count);
+		to_copy = iptr->counter;
+		to_copy =  min(to_copy, count);
+		if (to_copy < -1) {
+			return 0;
+		} 
 		notcopied = copy_to_user(user, minorzero, to_copy);
+		iptr->counter = iptr->counter - to_copy + notcopied;
 	} else {
 		printk("read from minor 1\n");
-		to_copy =  min(strlen(minorone) + 1, count);
+		to_copy = iptr->counter;
+		to_copy =  min(to_copy, count);
+		if (to_copy < -1) {
+			return 0;
+		} 
 		notcopied = copy_to_user(user, minorone, to_copy);
+		iptr->counter = iptr->counter - to_copy + notcopied;
 	}
 	printk("not copied: %lu\n", notcopied);
 	
@@ -54,13 +65,16 @@ static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_
 static int driver_open(struct inode *geraetedatei, struct file *instanz) 
 {
 	struct _instance_data *iptr;
+	int size;
 
 	printk("Open Driver..\n");
 
 	if (iminor(geraetedatei) == 0) {
 		printk("open from Minor: 0\n");
+		size = strlen("0\n");
 	} else {
 		printk("open from Minor: 1\n");
+		size = strlen("hello world\n");
 	}
 
 	iptr = (struct _instance_data *)kmalloc(sizeof(struct _instance_data), GFP_KERNEL);
@@ -69,7 +83,7 @@ static int driver_open(struct inode *geraetedatei, struct file *instanz)
 		return -ENOMEM;
 	} 
 
-	iptr->counter = strlen("hello world\n") + 1;
+	iptr->counter = size + 1;
 	instanz -> private_data = (void *) iptr;
 
 	return 0;
