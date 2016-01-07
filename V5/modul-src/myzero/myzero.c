@@ -5,6 +5,7 @@
 #include <linux/cdev.h>
 #include <linux/device.h>
 #include <asm/uaccess.h>
+#include <linux/slab.h>
 
 #define DRIVER_NAME "myzero"
 #define MINORS_COUNT 2
@@ -20,6 +21,10 @@ static struct file_operations fops = {
     .release = driver_release,
 };
 
+struct _instance_data {
+	int counter;
+};
+
 static struct cdev *driver_object;
 static dev_t device_number;
 struct class *template_class;
@@ -30,16 +35,27 @@ static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_
 	char *minorone = "hello world\n";
 	unsigned long notcopied;
 	size_t to_copy;
+	struct _instance_data *iptr;
 
 	/* http://stackoverflow.com/questions/12982318/linux-device-driver-is-it-possible-to-get-the-minor-number-using-a-file-descrip*/
 	if (iminor(instanz->f_path.dentry->d_inode) == 0) {
 		printk("read from minor 0\n");
-		to_copy =  min(strlen(minorzero) + 1, count);
+		to_copy = iptr->counter;
+		to_copy =  min(to_copy, count);
+		if (to_copy < -1) {
+			return 0;
+		} 
 		notcopied = copy_to_user(user, minorzero, to_copy);
+		iptr->counter = iptr->counter - to_copy + notcopied;
 	} else {
 		printk("read from minor 1\n");
-		to_copy =  min(strlen(minorone) + 1, count);
+		to_copy = iptr->counter;
+		to_copy =  min(to_copy, count);
+		if (to_copy < -1) {
+			return 0;
+		} 
 		notcopied = copy_to_user(user, minorone, to_copy);
+		iptr->counter = iptr->counter - to_copy + notcopied;
 	}
 	printk("not copied: %lu\n", notcopied);
 	
@@ -48,13 +64,27 @@ static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_
 
 static int driver_open(struct inode *geraetedatei, struct file *instanz) 
 {
+	struct _instance_data *iptr;
+	int size;
+
 	printk("Open Driver..\n");
 
 	if (iminor(geraetedatei) == 0) {
 		printk("open from Minor: 0\n");
+		size = strlen("0\n");
 	} else {
 		printk("open from Minor: 1\n");
+		size = strlen("hello world\n");
 	}
+
+	iptr = (struct _instance_data *)kmalloc(sizeof(struct _instance_data), GFP_KERNEL);
+	if (iptr == 0) {
+		printk("oops, not enough kern mem hehe\n");
+		return -ENOMEM;
+	} 
+
+	iptr->counter = size + 1;
+	instanz -> private_data = (void *) iptr;
 
 	return 0;
 }
@@ -66,6 +96,10 @@ static int driver_release(struct inode *geraetedatei, struct file *instanz)
 		printk("release from Minor: 0\n");
 	} else {
 		printk("release from Minor: 1\n");
+	}
+
+	if (instanz->private_data) {
+		kfree(instanz->private_data);
 	}
 
 	return 0;

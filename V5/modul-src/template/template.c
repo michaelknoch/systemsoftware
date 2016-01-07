@@ -4,72 +4,18 @@
 #include <linux/version.h>
 #include <linux/cdev.h>
 #include <linux/device.h>
-#include <asm/uaccess.h>
 
-#define DRIVER_NAME "myzero"
-#define MINORS_COUNT 2
-
-static int driver_open(struct inode *geraetedatei, struct file *instanz); 
-static int driver_release(struct inode *geraetedatei, struct file *instanz); 
-static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_t *offset);
+#define DRIVER_NAME "template"
+#define MINORS_COUNT 1
 
 static struct file_operations fops = {
-	.read = driver_read,
     .owner=THIS_MODULE,
-    .open = driver_open,
-    .release = driver_release,
 };
 
 static struct cdev *driver_object;
 static dev_t device_number;
 struct class *template_class;
 
-static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_t *offset) 
-{
-	char *minorzero = "0\n";
-	char *minorone = "hello world\n";
-	unsigned long notcopied;
-	size_t to_copy;
-
-	/* http://stackoverflow.com/questions/12982318/linux-device-driver-is-it-possible-to-get-the-minor-number-using-a-file-descrip*/
-	if (iminor(instanz->f_path.dentry->d_inode) == 0) {
-		printk("read from minor 0\n");
-		to_copy =  min(strlen(minorzero) + 1, count);
-		notcopied = copy_to_user(user, minorzero, to_copy);
-	} else {
-		printk("read from minor 1\n");
-		to_copy =  min(strlen(minorone) + 1, count);
-		notcopied = copy_to_user(user, minorone, to_copy);
-	}
-	printk("not copied: %lu\n", notcopied);
-	
-	return to_copy - notcopied;
-}
-
-static int driver_open(struct inode *geraetedatei, struct file *instanz) 
-{
-	printk("Open Driver..\n");
-
-	if (iminor(geraetedatei) == 0) {
-		printk("open from Minor: 0\n");
-	} else {
-		printk("open from Minor: 1\n");
-	}
-
-	return 0;
-}
-
-static int driver_release(struct inode *geraetedatei, struct file *instanz) 
-{
-	printk("Release Driver..\n");
-	if (iminor(geraetedatei) == 0) {
-		printk("release from Minor: 0\n");
-	} else {
-		printk("release from Minor: 1\n");
-	}
-
-	return 0;
-}
 
 
 static int __init ModInit(void)
