@@ -18,7 +18,7 @@ static dev_t device_number;
 struct class *template_class;
 
 static void tasklet_func(unsigned long data) {
-	prinkt("Ich bin ein winzigkleines Taslet...\n");
+	printk("Ich bin ein winzigkleines Taslet...\n");
 }
 
 DECLARE_TASKLET(tl_descr, tasklet_func, 0L);
