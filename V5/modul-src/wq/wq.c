@@ -6,7 +6,7 @@
 #include <linux/device.h>
 #include <linux/timer.h>
 
-#define DRIVER_NAME "timer"
+#define DRIVER_NAME "wq"
 #define MINORS_COUNT 1
 
 static struct timer_list mytimer;
