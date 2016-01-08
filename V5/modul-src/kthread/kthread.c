@@ -4,8 +4,12 @@
 #include <linux/version.h>
 #include <linux/cdev.h>
 #include <linux/device.h>
+#include <linux/completion.h>
+#include <linux/sched.h>
+#include <linux/kthread.h>
 
-#define DRIVER_NAME "template"
+
+#define DRIVER_NAME "kthread"
 #define MINORS_COUNT 1
 
 static struct file_operations fops = {
@@ -16,7 +20,30 @@ static struct cdev *driver_object;
 static dev_t device_number;
 struct class *template_class;
 
+static struct task_struct* thread_id;
+static wait_queue_head_t wq;
+static DECLARE_COMPLETION(on_exit);
 
+
+static int thread_code( void *data )
+{
+    unsigned long timeout;
+    int i;
+
+    allow_signal( SIGTERM ); 
+    for( i=0; i<10; i++ ) {
+        timeout=HZ; // wait 1 second
+        timeout=wait_event_interruptible_timeout(
+            wq, (timeout==0), timeout);
+        printk("thread_code: woke up ...\n");
+        if( timeout==-ERESTARTSYS ) {
+            printk("got signal, break\n");
+            break;
+        }
+    }
+    thread_id = 0;
+    complete_and_exit( &on_exit, 0 );
+}
 
 static int __init ModInit(void)
 {
@@ -51,6 +78,13 @@ static int __init ModInit(void)
 	major = MAJOR(device_number);
 	printk("Major number: %d\n", major);
 
+	init_waitqueue_head(&wq);
+    thread_id=kthread_create(thread_code, NULL, "MyKThread");
+    if( thread_id==0 ) {
+        return -EIO;
+    }
+    wake_up_process(thread_id);
+
 	return 0;
 	
 free_cdev:
@@ -64,6 +98,11 @@ free_device_number:
 
 static void __exit ModExit(void)
 {
+	if(thread_id){
+		kill_pid(task_pid(thread_id), SIGTERM, 1);
+	}
+	
+	wait_for_completion(&on_exit);
 
 	device_destroy(template_class, device_number);
 	class_destroy(template_class);
