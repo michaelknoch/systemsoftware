@@ -28,14 +28,13 @@ static DECLARE_COMPLETION(on_exit);
 static int thread_code( void *data )
 {
     unsigned long timeout;
-    int i;
 
     allow_signal( SIGTERM ); 
-    for( i=0; i<10; i++ ) {
-        timeout=HZ; // wait 1 second
+    while(!signal_pending(current)) {
+        timeout= 2 * HZ; // wait 1 second
         timeout=wait_event_interruptible_timeout(
             wq, (timeout==0), timeout);
-        printk("thread_code: woke up ...\n");
+        printk("thread_code: woke up after 2 secs ...\n");
         if( timeout==-ERESTARTSYS ) {
             printk("got signal, break\n");
             break;
