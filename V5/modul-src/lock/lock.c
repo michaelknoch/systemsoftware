@@ -6,6 +6,7 @@
 #include <linux/device.h>
 #include <linux/rwsem.h>
 #include <linux/semaphore.h>
+#include <linux/delay.h>
 
 #define DRIVER_NAME "lock"
 #define MINORS_COUNT 1
@@ -24,8 +25,19 @@ struct class *template_class;
 static struct semaphore lock;
 
 
-static int driver_open(struct inode *geraetedatei, struct file *instanz) {
+static int driver_open(struct inode *geraetedatei, struct file *instanz)
+{
+	//nonblocking accquire, returns 0 on success
+	while (down_trylock(&lock) != 0) {
+		//accquire failed
+		printk("We are busy, try later\n");
+		msleep(200);
+	}
 
+	// sleep 3 seconds
+	printk("open success");
+	msleep(3 * 1000);
+	up(&lock);
 	return 0;
 }
 
