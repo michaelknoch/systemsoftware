@@ -4,7 +4,7 @@
 DRIVER_NAME=template
 DRIVER_PATH=/lib/modules/4.2.3/extra
 
-dmesg -c
+dmesg -c > /dev/null
 
 # zeigt die Informationen Ihres Moduls mit modinfo
 modinfo $DRIVER_PATH/$DRIVER_NAME.ko
@@ -13,6 +13,7 @@ modinfo $DRIVER_PATH/$DRIVER_NAME.ko
 insmod $DRIVER_PATH/$DRIVER_NAME.ko
 
 # zeigt die entspr. Lade Info des Kernel Logs
+sleep 10
 dmesg -c
 
 # zeigt die entspr. Infos aus /proc/devices an.
