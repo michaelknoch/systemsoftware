@@ -5,7 +5,7 @@
 #include <linux/cdev.h>
 #include <linux/device.h>
 
-#define DRIVER_NAME "template"
+#define DRIVER_NAME "buf"
 #define MINORS_COUNT 1
 
 static struct file_operations fops = {
