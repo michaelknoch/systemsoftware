@@ -6,7 +6,10 @@
 #include <linux/device.h>
 #include <linux/timer.h>
 
-#define DRIVER_NAME "timer"
+
+#include <linux/workqueue.h>
+
+#define DRIVER_NAME "wq"
 #define MINORS_COUNT 1
 
 static struct timer_list mytimer;
@@ -21,7 +24,11 @@ struct class *template_class;
 
 static unsigned int min, max, curr, prev = 0;
 
-static void inc_count(unsigned long arg)
+static struct workqueue_struct *wq;
+static void inc_count(struct work_struct*);
+static DECLARE_WORK( work_obj, inc_count);
+
+static void inc_count(struct work_struct *work)
 {
     curr = jiffies - prev;
 
@@ -39,9 +46,17 @@ static void inc_count(unsigned long arg)
 
     prev = jiffies;
 
-    printk("inc_count called (%ld)...\n current value: %u\n min value: %u\n max value: %u\n", mytimer.expires, curr, min, max);
-    mytimer.expires = jiffies + (2*HZ); // 2 second
-    add_timer( &mytimer );
+     printk("inc_count called (%ld)... \ncurrent: %d\nmin: %d\nmax: %d\n",
+			mytimer.expires, curr, min, max );
+
+	
+	if (queue_work(wq, &work_obj)) {
+		printk("queue_work SUCCESS\n");
+	} else {
+		printk("queue_work ERROR\n");
+	}
+
+
 }
 
 static int __init ModInit(void)
@@ -77,11 +92,14 @@ static int __init ModInit(void)
 	major = MAJOR(device_number);
 	printk("Major number: %d\n", major);
 
-	init_timer( &mytimer );
-    mytimer.function = inc_count;
-    mytimer.data = 0;
-    mytimer.expires = jiffies + (2*HZ); // 2 second
-    add_timer( &mytimer );
+	wq = create_workqueue("DrvrSmpl");
+
+	if(queue_work(wq, &work_obj)) {
+        printk( "queue_work successful ...\n");
+    } else {
+        printk( "queue_work not successful ...\n");
+    }
+
 
 	return 0;
 
@@ -104,17 +122,12 @@ static void __exit ModExit(void)
 
 	cdev_del( driver_object );
 	unregister_chrdev_region( device_number, 1 );
-
-	if( timer_pending( &mytimer ) ) {
-        printk("Timer ist aktiviert ...\n");
-	}
-    if( del_timer_sync( &mytimer ) ) {
-        printk("Aktiver Timer deaktiviert\n");
+	
+	if( wq ) {
+        destroy_workqueue( wq );
+        pr_debug("workqueue destroyed\n");
     }
-    else {
-        printk("Kein Timer aktiv\n");
-    }
-
+	
 	printk("exiting\n");
 
 }
