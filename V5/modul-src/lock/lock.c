@@ -4,19 +4,30 @@
 #include <linux/version.h>
 #include <linux/cdev.h>
 #include <linux/device.h>
+#include <linux/rwsem.h>
+#include <linux/semaphore.h>
 
 #define DRIVER_NAME "lock"
 #define MINORS_COUNT 1
 
+static int driver_open(struct inode *geraetedatei, struct file *instanz); 
+
 static struct file_operations fops = {
     .owner=THIS_MODULE,
+    .open = driver_open,
 };
 
 static struct cdev *driver_object;
 static dev_t device_number;
 struct class *template_class;
 
+static struct semaphore lock;
 
+
+static int driver_open(struct inode *geraetedatei, struct file *instanz) {
+
+	return 0;
+}
 
 static int __init ModInit(void)
 {
@@ -50,6 +61,9 @@ static int __init ModInit(void)
 
 	major = MAJOR(device_number);
 	printk("Major number: %d\n", major);
+
+	//init semaphore
+	sema_init(&lock, 1);
 
 	return 0;
 	
