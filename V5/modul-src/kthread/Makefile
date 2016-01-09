@@ -7,6 +7,7 @@ NAME=kthread
 SOURCES=$(NAME).c
 OBJECTS=$(SOURCES:.c=.o)
 TARGET_DIR=/lib/modules/4.2.3/extra/
+TARGET_DIR_TEST=/usr/bin/
 
 ifneq ($(KERNELRELEASE),)
 obj-m	:= $(OBJECTS)
@@ -23,3 +24,4 @@ clean:
 	rm -rf *.o *.ko *.mod.c *.symvers *.order
 install:
 	scp $(NAME).ko user@192.168.29.48:$(TARGET_DIR)$(NAME).ko
+	scp test_$(NAME).sh user@192.168.29.48:$(TARGET_DIR_TEST)test_$(NAME).sh
