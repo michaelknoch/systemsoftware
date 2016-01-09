@@ -6,7 +6,7 @@
 #include <linux/device.h>
 #include <linux/timer.h>
 
-#define DRIVER_NAME "wq"
+#define DRIVER_NAME "timer"
 #define MINORS_COUNT 1
 
 static struct timer_list mytimer;
@@ -19,9 +19,27 @@ static struct cdev *driver_object;
 static dev_t device_number;
 struct class *template_class;
 
+static unsigned int min, max, curr, prev = 0;
+
 static void inc_count(unsigned long arg)
 {
-    printk("inc_count called (%ld)...\n", mytimer.expires );
+    curr = jiffies - prev;
+
+    // if there was a prev iteration
+    if(prev) {
+
+        // use current as max if its creater than max
+        max = curr > max ? curr : max;
+
+        // use current as min if its smaller than min
+        min = curr < min ? curr : min;
+
+    }
+    
+
+    prev = jiffies;
+
+    printk("inc_count called (%ld)...\n current value: %u\n min value: %u\n max value: %u\n", mytimer.expires, curr, min, max);
     mytimer.expires = jiffies + (2*HZ); // 2 second
     add_timer( &mytimer );
 }
@@ -66,11 +84,11 @@ static int __init ModInit(void)
     add_timer( &mytimer );
 
 	return 0;
-	
+
 free_cdev:
 	kobject_put(&driver_object->kobj);
 	driver_object = NULL;
-	
+
 free_device_number:
 	unregister_chrdev_region( device_number, 1 );
 	return -1;
@@ -83,10 +101,10 @@ static void __exit ModExit(void)
 	class_destroy(template_class);
 
 	printk("trying to unregister 0x%x\n", device_number);
-	
+
 	cdev_del( driver_object );
 	unregister_chrdev_region( device_number, 1 );
-	
+
 	if( timer_pending( &mytimer ) ) {
         printk("Timer ist aktiviert ...\n");
 	}
@@ -98,7 +116,7 @@ static void __exit ModExit(void)
     }
 
 	printk("exiting\n");
-	
+
 }
 
 module_init(ModInit);
