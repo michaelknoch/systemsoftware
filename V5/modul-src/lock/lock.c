@@ -35,7 +35,7 @@ static int driver_open(struct inode *geraetedatei, struct file *instanz)
 	}
 
 	// sleep 3 seconds
-	printk("open success");
+	printk("open success\n");
 	msleep(3 * 1000);
 	up(&lock);
 	return 0;
