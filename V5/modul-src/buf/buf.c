@@ -19,13 +19,20 @@ struct class *template_class;
 static int driver_open(struct inode *geraetedatei, struct file *instanz); 
 static int driver_release(struct inode *geraetedatei, struct file *instanz); 
 static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_t *offset);
-static ssize_t driver_write(struct file *instanz, const char __user *user, size_t count, loff_t *offs);
+static ssize_t driver_write(struct file *instanz, char __user *user, size_t count, loff_t *offs);
 
 static int driver_open(struct inode *geraetedatei, struct file *instanz) {
 	return 0;
 }
 
 static int driver_release(struct inode *geraetedatei, struct file *instanz) {
+	return 0;
+}
+
+static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_t *offset) {
+	return 0;
+}
+static ssize_t driver_write(struct file *instanz, char *user, size_t count, loff_t *offset) {
 	return 0;
 }
 
