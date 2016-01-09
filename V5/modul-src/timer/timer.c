@@ -19,26 +19,27 @@ static struct cdev *driver_object;
 static dev_t device_number;
 struct class *template_class;
 
-static unsigned int min, max, current, prev = 0;
+static unsigned int min, max, curr, prev = 0;
 
 static void inc_count(unsigned long arg)
 {
-    current = jiffies - prev;
+    curr = jiffies - prev;
 
     // if there was a prev iteration
     if(prev) {
 
         // use current as max if its creater than max
-        max = current >= max ? current : max;
+        max = curr > max ? curr : max;
 
         // use current as min if its smaller than min
-        min = current < min ? current : min;
+        min = curr < min ? curr : min;
 
     }
+    
 
     prev = jiffies;
 
-    printk("inc_count called (%ld)...\n current value: %ld\n min value: %ld\n max value: %ld\n", mytimer.expires, current, min, max);
+    printk("inc_count called (%ld)...\n current value: %u\n min value: %u\n max value: %u\n", mytimer.expires, curr, min, max);
     mytimer.expires = jiffies + (2*HZ); // 2 second
     add_timer( &mytimer );
 }
