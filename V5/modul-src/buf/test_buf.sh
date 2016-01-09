@@ -1,7 +1,7 @@
 
 #!/bin/sh
 
-DRIVER_NAME=template
+DRIVER_NAME=buf
 DRIVER_PATH=/lib/modules/4.2.3/extra
 
 dmesg -c
