@@ -5,6 +5,7 @@
 #include <linux/cdev.h>
 #include <linux/device.h>
 #include <linux/timer.h>
+#include <linux/delay.h>
 
 
 #include <linux/workqueue.h>
@@ -49,6 +50,7 @@ static void inc_count(struct work_struct *work)
      printk("inc_count called (%ld)... \ncurrent: %d\nmin: %d\nmax: %d\n",
 			mytimer.expires, curr, min, max );
 
+     msleep(2000);
 	
 	if (queue_work(wq, &work_obj)) {
 		printk("queue_work SUCCESS\n");
