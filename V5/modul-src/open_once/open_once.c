@@ -8,7 +8,7 @@
 #include <linux/semaphore.h>
 #include <linux/delay.h>
 
-#define DRIVER_NAME "lock"
+#define DRIVER_NAME "open_once"
 #define MINORS_COUNT 1
 
 static int driver_open(struct inode *geraetedatei, struct file *instanz); 
