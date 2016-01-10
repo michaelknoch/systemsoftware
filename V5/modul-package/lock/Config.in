@@ -1,5 +1,5 @@
 config BR2_PACKAGE_MYNULL
-	bool "buf"
+	bool "lock"
 	help
-	  This is a comment that explains what buf is.
+	  This is a comment that explains what lock is.
 	  http://tucktuck.org/tucktucktemplate/
