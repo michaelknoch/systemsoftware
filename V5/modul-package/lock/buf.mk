@@ -2,7 +2,7 @@
 
 LOCK_VERSION = 1.0
 LOCK_SITE_METHOD = file
-LOCK_NAME = buf
+LOCK_NAME = lock
 LOCK_SITE = $(LOCK_NAME)-$(LOCK_VERSION).tar.gz
 
 
