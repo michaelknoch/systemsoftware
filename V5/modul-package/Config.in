@@ -1,0 +1,17 @@
+config BR2_PACKAGE_SYSO
+	bool "syso"
+	help
+	  All Syso Packages
+
+
+if BR2_PACKAGE_SYSO
+    menu "Verschiedene Sachen"
+        source "package/syso/template/Config.in"
+		source "package/syso/openclose/Config.in"
+		source "package/syso/access/Config.in"
+		source "package/syso/mynull/Config.in"
+		source "package/syso/myzero/Config.in"
+    endmenu
+
+endif
+
