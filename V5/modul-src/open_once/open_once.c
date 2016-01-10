@@ -5,7 +5,7 @@
 #include <linux/cdev.h>
 #include <linux/device.h>
 #include <linux/rwsem.h>
-#include <linux/semaphore.h>
+#include <linux/mutex.h>
 #include <linux/delay.h>
 
 #define DRIVER_NAME "open_once"
@@ -22,13 +22,14 @@ static struct cdev *driver_object;
 static dev_t device_number;
 struct class *template_class;
 
-static struct semaphore lock;
+static struct mutex lock;
 
 
 static int driver_open(struct inode *geraetedatei, struct file *instanz)
 {
-	//nonblocking accquire, returns 0 on success
-	while (down_trylock(&lock) != 0) {
+	//http://lxr.free-electrons.com/source/include/linux/mutex.h
+	//acquire, returns 1 on success
+	while (mutex_trylock(&lock) != 1) {
 		//accquire failed
 		printk("We are busy, try later\n");
 		msleep(200);
@@ -37,7 +38,7 @@ static int driver_open(struct inode *geraetedatei, struct file *instanz)
 	// sleep 3 seconds
 	printk("open success\n");
 	msleep(3 * 1000);
-	up(&lock);
+	mutex_unlock(&lock);
 	return 0;
 }
 
@@ -75,7 +76,7 @@ static int __init ModInit(void)
 	printk("Major number: %d\n", major);
 
 	//init semaphore
-	sema_init(&lock, 1);
+	mutex_init(&lock);
 
 	return 0;
 	
