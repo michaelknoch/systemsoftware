@@ -1,28 +1,28 @@
-##### BUF
+##### TASKLET
 
-BUF_VERSION = 1.0
-BUF_SITE_METHOD = file
-BUF_NAME = buf
-BUF_SITE = $(BUF_NAME)-$(BUF_VERSION).tar.gz
+TASKLET_VERSION = 1.0
+TASKLET_SITE_METHOD = file
+TASKLET_NAME = tasklet
+TASKLET_SITE = $(TASKLET_NAME)-$(TASKLET_VERSION).tar.gz
 
 
-BUF_DEPENDENCIES = linux
+TASKLET_DEPENDENCIES = linux
 
-define BUF_BUILD_CMDS
+define TASKLET_BUILD_CMDS
 	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) modules
 endef
 
-define BUF_INSTALL_TARGET_CMDS
+define TASKLET_INSTALL_TARGET_CMDS
 	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) modules_install
-	$(INSTALL) -m 0755 -D $(@D)/test_$(BUF_NAME).sh $(TARGET_DIR)/usr/bin/test_$(BUF_NAME).sh
+	$(INSTALL) -m 0755 -D $(@D)/test_$(TASKLET_NAME).sh $(TARGET_DIR)/usr/bin/test_$(TASKLET_NAME).sh
 endef
 
-define BUF_CLEAN_CMDS
+define TASKLET_CLEAN_CMDS
 	$(MAKE) -C $(@D) clean
 endef
 
-define BUF_UNINSTALL_TARGET_CMS
-	rm $(TARGET_DIR)/usr/bin/$(BUF_NAME)
+define TASKLET_UNINSTALL_TARGET_CMS
+	rm $(TARGET_DIR)/usr/bin/$(TASKLET_NAME)
 endef
 
 $(eval $(generic-package))

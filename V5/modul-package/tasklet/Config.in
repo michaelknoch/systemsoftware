@@ -1,4 +1,4 @@
-config BR2_PACKAGE_BUF
+config BR2_PACKAGE_TASKLET
 	bool "buf"
 	help
 	  This is a comment that explains what buf is.
