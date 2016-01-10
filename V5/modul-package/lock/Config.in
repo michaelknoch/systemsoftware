@@ -1,4 +1,4 @@
-config BR2_PACKAGE_MYNULL
+config BR2_PACKAGE_LOCK
 	bool "lock"
 	help
 	  This is a comment that explains what lock is.

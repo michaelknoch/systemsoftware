@@ -1,5 +1,5 @@
-config BR2_PACKAGE_MYNULL
-	bool "buf"
+config BR2_PACKAGE_OPEN_ONCE
+	bool "open_once"
 	help
-	  This is a comment that explains what buf is.
+	  This is a comment that explains what open_once is.
 	  http://tucktuck.org/tucktucktemplate/
