@@ -1,5 +1,5 @@
-config BR2_PACKAGE_OPENCLOSE
-	bool "openclose"
+config BR2_PACKAGE_KTHREAD
+	bool "kthread"
 	help
-	  This is a comment that explains what openclose is.
+	  This is a comment that explains what kthread is.
 	  http://tucktuck.org/tucktucktemplate/
