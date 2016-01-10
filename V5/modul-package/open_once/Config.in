@@ -1,0 +1,5 @@
+config BR2_PACKAGE_MYNULL
+	bool "buf"
+	help
+	  This is a comment that explains what buf is.
+	  http://tucktuck.org/tucktucktemplate/
