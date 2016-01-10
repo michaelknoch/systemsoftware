@@ -1,0 +1,5 @@
+config BR2_PACKAGE_WQ
+	bool "wq"
+	help
+	  This is a comment that explains what wq is.
+	  http://tucktuck.org/tucktucktemplate/
