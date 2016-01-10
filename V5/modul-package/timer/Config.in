@@ -1,5 +1,5 @@
-config BR2_PACKAGE_BUF
-	bool "buf"
+config BR2_PACKAGE_TIMER
+	bool "timer"
 	help
-	  This is a comment that explains what buf is.
+	  This is a comment that explains what timer is.
 	  http://tucktuck.org/tucktucktemplate/
