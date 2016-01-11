@@ -11,7 +11,7 @@
 #define MINORS_COUNT 1
 
 
-#define ZWEIHUNDERTFUENFUNDFUENFZIG 64
+#define VIERUNDSECHZIG 32
 
 /*
 	Lots of the following code is borrowed from:
@@ -22,6 +22,10 @@ static int driver_open(struct inode *geraetedatei, struct file *instanz);
 static int driver_release(struct inode *geraetedatei, struct file *instanz); 
 static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_t *offset);
 static ssize_t driver_write(struct file *instanz, const char *user, size_t count, loff_t *offset);
+
+
+static wait_queue_head_t waitQueueRead;
+static wait_queue_head_t waitQueueWrite;
 
 static struct file_operations fops = {
 	
@@ -40,7 +44,7 @@ struct class *template_class;
 static DEFINE_MUTEX(read_lock);
 static DEFINE_MUTEX(write_lock);
 
-static DECLARE_KFIFO(fifo, unsigned char, ZWEIHUNDERTFUENFUNDFUENFZIG);
+static DEFINE_KFIFO(fifo, unsigned char, VIERUNDSECHZIG);
 
 
 
@@ -52,23 +56,25 @@ static int driver_release(struct inode *geraetedatei, struct file *instanz) {
 	return 0;
 }
 
-static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_t *offset) {
-	
+static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_t *offset) 
+{	
 	int ret;
-    unsigned int copied;
- 
-	if (mutex_lock_interruptible(&read_lock)) {
-		return -ERESTARTSYS;	
+	unsigned int copied;
+	printk("driver read start\n");
+
+	if(wait_event_interruptible(waitQueueRead, !kfifo_is_empty(&fifo))) {
+		printk("ERESTARTSYS");	
+		return -ERESTARTSYS;
 	}
-	
+
 	ret = kfifo_to_user(&fifo, user, count, &copied);
+	printk("kfifotouser\n");	
 
-	mutex_unlock(&read_lock);
+	wake_up_interruptible(&waitQueueWrite);
 
+	printk("driver read end\n");	
 	return ret ? ret : copied;
 
-
-	return 0;
 }
 static ssize_t driver_write(struct file *instanz, const char *user, size_t count, loff_t *offset)
 {
@@ -76,14 +82,13 @@ static ssize_t driver_write(struct file *instanz, const char *user, size_t count
 
 	int ret;
 	unsigned int copied;
- 
-	if (mutex_lock_interruptible(&write_lock)) {
+ 	
+ 	if(wait_event_interruptible(waitQueueWrite, kfifo_is_empty(&fifo))) {
 		return -ERESTARTSYS;
 	}
 
 	ret = kfifo_from_user(&fifo, user, count, &copied);
-
-	mutex_unlock(&write_lock);
+	wake_up_interruptible(&waitQueueRead);
 
 	return ret ? ret : copied;
 }
@@ -120,6 +125,9 @@ static int __init ModInit(void)
 
 	major = MAJOR(device_number);
 	printk("Major number: %d\n", major);
+
+	init_waitqueue_head(&waitQueueRead);
+	init_waitqueue_head(&waitQueueWrite);
 
 
 	
