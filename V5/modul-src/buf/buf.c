@@ -4,28 +4,32 @@
 #include <linux/version.h>
 #include <linux/cdev.h>
 #include <linux/device.h>
+#include <linux/slab.h>
 
 #define DRIVER_NAME "buf"
 #define MINORS_COUNT 1
 
 static int driver_open(struct inode *geraetedatei, struct file *instanz); 
 static int driver_release(struct inode *geraetedatei, struct file *instanz); 
-static ssize_t driver_read(struct file *instanz, const char *user, size_t count, loff_t *offset);
-static ssize_t driver_write(struct file *instanz, const char *user, size_t count, loff_t *offset);
+static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_t *offset);
+static ssize_t driver_write(struct file *instanz, char *user, size_t count, loff_t *offset);
 
 typedef struct {
 	char * buffer;
 	int curIdx;
 	int length;
 	int bytesInside;
-} buffer;
+} _buffer;
+
+static _buffer buffer;
 
 static struct file_operations fops = {
-	.write = driver_write,
-    .read = driver_read,
-    .owner=THIS_MODULE,
+	
+    .owner= THIS_MODULE,
     .open = driver_open,
     .release = driver_release,
+    .write = driver_write,
+    .read = driver_read,
 };
 
 static struct cdev *driver_object;
@@ -40,10 +44,10 @@ static int driver_release(struct inode *geraetedatei, struct file *instanz) {
 	return 0;
 }
 
-static ssize_t driver_read(struct file *instanz, const char *user, size_t count, loff_t *offset) {
+static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_t *offset) {
 	return 0;
 }
-static ssize_t driver_write(struct file *instanz, const char *user, size_t count, loff_t *offset) 
+static ssize_t driver_write(struct file *instanz, char *user, size_t count, loff_t *offset) 
 {
 	return 0;
 }
@@ -81,6 +85,16 @@ static int __init ModInit(void)
 	major = MAJOR(device_number);
 	printk("Major number: %d\n", major);
 
+
+	buffer.buffer = kmalloc(255, GFP_KERNEL);
+	if (buffer.buffer == NULL) {
+		return -ENOMEM;
+	}
+	buffer.length = 255;
+	buffer.curIdx = 0;
+	buffer.bytesInside = 0;
+
+
 	return 0;
 	
 free_cdev:
@@ -94,6 +108,8 @@ free_device_number:
 
 static void __exit ModExit(void)
 {
+
+	kfree(buffer.buffer);
 
 	device_destroy(template_class, device_number);
 	class_destroy(template_class);
