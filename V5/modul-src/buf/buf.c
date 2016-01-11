@@ -12,7 +12,7 @@
 static int driver_open(struct inode *geraetedatei, struct file *instanz); 
 static int driver_release(struct inode *geraetedatei, struct file *instanz); 
 static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_t *offset);
-static ssize_t driver_write(struct file *instanz, char *user, size_t count, loff_t *offset);
+static ssize_t driver_write(struct file *instanz, const char *user, size_t count, loff_t *offset);
 
 typedef struct {
 	char * buffer;
@@ -28,8 +28,8 @@ static struct file_operations fops = {
     .owner= THIS_MODULE,
     .open = driver_open,
     .release = driver_release,
-    .write = driver_write,
     .read = driver_read,
+    .write = driver_write,
 };
 
 static struct cdev *driver_object;
@@ -47,7 +47,7 @@ static int driver_release(struct inode *geraetedatei, struct file *instanz) {
 static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_t *offset) {
 	return 0;
 }
-static ssize_t driver_write(struct file *instanz, char *user, size_t count, loff_t *offset) 
+static ssize_t driver_write(struct file *instanz, const char *user, size_t count, loff_t *offset)
 {
 	return 0;
 }
