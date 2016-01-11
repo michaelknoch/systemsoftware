@@ -18,6 +18,8 @@ dmesg -c
 # zeigt die entspr. Infos aus /proc/devices an.
 cat /proc/devices
 
+cat /dev/open_once & cat/dev/open_once & cat/dev/open_once
+
 
 # entlädt das Modul
 rmmod $DRIVER_NAME
