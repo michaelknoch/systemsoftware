@@ -1,7 +1,7 @@
 
 #!/bin/sh
 
-DRIVER_NAME=open_once
+DRIVER_NAME=tasklet
 DRIVER_PATH=/lib/modules/4.2.3/extra
 
 dmesg -c
@@ -17,8 +17,6 @@ dmesg -c
 
 # zeigt die entspr. Infos aus /proc/devices an.
 cat /proc/devices
-
-cat /dev/open_once & cat/dev/open_once & cat/dev/open_once
 
 
 # entlädt das Modul
