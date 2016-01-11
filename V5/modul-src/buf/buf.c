@@ -36,6 +36,10 @@ static struct cdev *driver_object;
 static dev_t device_number;
 struct class *template_class;
 
+atomic_t bytesInBuffer;
+
+#define ZWEIHUNDERTFUENFUNDFUENFZIG 255
+
 static int driver_open(struct inode *geraetedatei, struct file *instanz) {
 	return 0;
 }
@@ -86,14 +90,16 @@ static int __init ModInit(void)
 	printk("Major number: %d\n", major);
 
 
-	buffer.buffer = kmalloc(255, GFP_KERNEL);
+	buffer.buffer = kmalloc(ZWEIHUNDERTFUENFUNDFUENFZIG, GFP_KERNEL);
 	if (buffer.buffer == NULL) {
 		return -ENOMEM;
 	}
-	buffer.length = 255;
+	buffer.length = ZWEIHUNDERTFUENFUNDFUENFZIG;
 	buffer.curIdx = 0;
 	buffer.bytesInside = 0;
 
+
+	atomic_set(&bytesInBuffer, 0);
 
 	return 0;
 	
