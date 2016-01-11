@@ -5,23 +5,23 @@
 #include <linux/cdev.h>
 #include <linux/device.h>
 #include <linux/slab.h>
+#include <linux/kfifo.h>
 
 #define DRIVER_NAME "buf"
 #define MINORS_COUNT 1
+
+
+#define ZWEIHUNDERTFUENFUNDFUENFZIG 64
+
+/*
+	Lots of the following code is borrowed from:
+	http://lxr.free-electrons.com/source/samples/kfifo/bytestream-example.c
+*/
 
 static int driver_open(struct inode *geraetedatei, struct file *instanz); 
 static int driver_release(struct inode *geraetedatei, struct file *instanz); 
 static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_t *offset);
 static ssize_t driver_write(struct file *instanz, const char *user, size_t count, loff_t *offset);
-
-typedef struct {
-	char * buffer;
-	int curIdx;
-	int length;
-	int bytesInside;
-} _buffer;
-
-static _buffer buffer;
 
 static struct file_operations fops = {
 	
@@ -36,9 +36,13 @@ static struct cdev *driver_object;
 static dev_t device_number;
 struct class *template_class;
 
-atomic_t bytesInBuffer;
 
-#define ZWEIHUNDERTFUENFUNDFUENFZIG 255
+static DEFINE_MUTEX(read_lock);
+static DEFINE_MUTEX(write_lock);
+
+static DECLARE_KFIFO(fifo, unsigned char, ZWEIHUNDERTFUENFUNDFUENFZIG);
+
+
 
 static int driver_open(struct inode *geraetedatei, struct file *instanz) {
 	return 0;
@@ -49,11 +53,39 @@ static int driver_release(struct inode *geraetedatei, struct file *instanz) {
 }
 
 static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_t *offset) {
+	
+	int ret;
+    unsigned int copied;
+ 
+	if (mutex_lock_interruptible(&read_lock)) {
+		return -ERESTARTSYS;	
+	}
+	
+	ret = kfifo_to_user(&fifo, user, count, &copied);
+
+	mutex_unlock(&read_lock);
+
+	return ret ? ret : copied;
+
+
 	return 0;
 }
 static ssize_t driver_write(struct file *instanz, const char *user, size_t count, loff_t *offset)
 {
-	return 0;
+
+
+	int ret;
+	unsigned int copied;
+ 
+	if (mutex_lock_interruptible(&write_lock)) {
+		return -ERESTARTSYS;
+	}
+
+	ret = kfifo_from_user(&fifo, user, count, &copied);
+
+	mutex_unlock(&write_lock);
+
+	return ret ? ret : copied;
 }
 
 static int __init ModInit(void)
@@ -90,17 +122,7 @@ static int __init ModInit(void)
 	printk("Major number: %d\n", major);
 
 
-	buffer.buffer = kmalloc(ZWEIHUNDERTFUENFUNDFUENFZIG, GFP_KERNEL);
-	if (buffer.buffer == NULL) {
-		return -ENOMEM;
-	}
-	buffer.length = ZWEIHUNDERTFUENFUNDFUENFZIG;
-	buffer.curIdx = 0;
-	buffer.bytesInside = 0;
-
-
-	atomic_set(&bytesInBuffer, 0);
-
+	
 	return 0;
 	
 free_cdev:
@@ -114,8 +136,6 @@ free_device_number:
 
 static void __exit ModExit(void)
 {
-
-	kfree(buffer.buffer);
 
 	device_destroy(template_class, device_number);
 	class_destroy(template_class);
