@@ -4,7 +4,7 @@
 DRIVER_NAME=lock
 DRIVER_PATH=/lib/modules/4.2.3/extra
 
-dmesg -c
+dmesg -c > /dev/null
 
 # zeigt die Informationen Ihres Moduls mit modinfo
 modinfo $DRIVER_PATH/$DRIVER_NAME.ko
