@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Buildroot 2015.11-git-gec4b60a Configuration
+# Buildroot 2015.11-git-g66ff947-dirty Configuration
 #
 BR2_HAVE_DOT_CONFIG=y
 
@@ -1721,6 +1721,21 @@ BR2_PACKAGE_LIBNSPR_ARCH_SUPPORT=y
 #
 # BR2_PACKAGE_SHARED_MIME_INFO is not set
 # BR2_PACKAGE_SNOWBALL_INIT is not set
+BR2_PACKAGE_SYSO=y
+
+#
+# Verschiedene Sachen
+#
+BR2_PACKAGE_ACCESS=y
+BR2_PACKAGE_BUF=y
+BR2_PACKAGE_KTHREAD=y
+BR2_PACKAGE_LOCK=y
+BR2_PACKAGE_MYZERO=y
+BR2_PACKAGE_OPEN_ONCE=y
+BR2_PACKAGE_TASKLET=y
+BR2_PACKAGE_TEMPLATE=y
+BR2_PACKAGE_TIMER=y
+BR2_PACKAGE_WQ=y
 
 #
 # Networking applications
