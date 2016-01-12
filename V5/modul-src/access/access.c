@@ -29,6 +29,7 @@ struct opts {
 	int read;
 	int open;
 	int write;
+	int buf;
 	int time_to_wait_open_was_set;
 	int time_to_wait_open;
 	int time_to_wait_read_or_write_was_set;
@@ -38,6 +39,10 @@ struct opts {
 struct opts *options;
 
 int usleep(unsigned int);
+void *bufbufconsumer(void *args);
+void *bufbufproducer(void *args);
+
+
 
 void *open_device(void *args) 
 {
@@ -175,11 +180,14 @@ int main(int argc, char *argv[])
 	
 	options = malloc (sizeof (struct opts));
 
-	while(-1 != (opt = getopt (argc, argv, "d:ot:rw"))) {
+	while(-1 != (opt = getopt (argc, argv, "bd:ot:rw"))) {
 		switch(opt){
 			case 'r':
 				options->read = TRUE;
 				break;
+			case 'b':
+				options->buf = TRUE;
+				break;	
 			case 'o':
 				printf("%s\n", "case o");
 				options->open = TRUE;
@@ -198,9 +206,11 @@ int main(int argc, char *argv[])
 			
 		}
 	}
-	printf("%s\n", "nach der while");
-	if (options->open) 
+
+
+	if (options->open || options->buf) 
 	{
+
 
 		printf("%s\n", "options->open TRUE");
 
@@ -238,7 +248,19 @@ int main(int argc, char *argv[])
 			}
 
 
-			pthread_create(&threads[i], &attr[i], open_device, (void *) &thread[i]);
+			if (options->open) {
+				pthread_create(&threads[i], &attr[i], open_device, (void *) &thread[i]);
+			} else {
+				
+				if(i % 2) {
+
+					pthread_create(&threads[i], &attr[i], bufbufproducer, (void *) &thread[i]);	
+				} else {
+					pthread_create(&threads[i], &attr[i], bufbufconsumer, (void *) &thread[i]);	
+
+				}
+			}
+			
 		}
 
 		
@@ -268,4 +290,104 @@ int main(int argc, char *argv[])
 
 
 	return 0;
+}
+
+
+
+void *bufbufproducer(void *args) 
+{
+	
+	int fd;
+	char *buffer = "hallo\n";
+
+	struct thread_meta *meta = (struct thread_meta *) args;
+	printf("T:%d started\n", meta->thread_id);
+	
+
+	fd = open("/dev/buf", O_WRONLY);
+	if (fd < 0) 
+	{
+		fprintf(stderr, "T%d: opening Error!\n", meta->thread_id);
+		pthread_exit(NULL);
+	} else {
+		printf("T%d: open success\n", meta->thread_id);
+	}
+
+	/* perform read */
+	if (write(fd, buffer, 6) == -1) {
+		fprintf(stderr, "T:%d write Error!\n", meta->thread_id);
+	} else {
+		printf("T%d: write success\n", meta->thread_id);
+	}
+
+	if (options->time_to_wait_open_was_set)
+	{
+		usleep(NANO_TO_MS * 3000);
+	}
+	
+	/* perform write */
+	/*if (write(fd, buffer, 256) == -1) {
+		fprintf(stderr, "write Error!\n");
+	} else {
+		printf("Write success. ThreadID: %d\n", meta->thread_id);
+	}*/
+
+
+	if (close(fd) == -1) {
+		fprintf(stderr, "T%d: Closing Error!\n", meta->thread_id);
+	} else {
+		printf("T%d: close success\n", meta->thread_id);
+	}
+
+	pthread_exit(NULL);
+}
+
+
+
+void *bufbufconsumer(void *args) 
+{
+	
+	int fd;
+	char buffer[20];
+
+	struct thread_meta *meta = (struct thread_meta *) args;
+	printf("T:%d started\n", meta->thread_id);
+	
+
+	fd = open("/dev/buf", O_RONLY);
+	if (fd < 0) 
+	{
+		fprintf(stderr, "T%d: opening Error!\n", meta->thread_id);
+		pthread_exit(NULL);
+	} else {
+		printf("T%d: open success\n", meta->thread_id);
+	}
+
+	/* perform read */
+	if (read(fd, buffer, 256) == -1) {
+		fprintf(stderr, "T:%d read Error!\n", meta->thread_id);
+	} else {
+		printf("T%d: read success\n", meta->thread_id);
+	}
+
+	if (options->time_to_wait_open_was_set)
+	{
+		usleep(NANO_TO_MS * 1800);
+	}
+	
+	/* perform write */
+	/*if (write(fd, buffer, 256) == -1) {
+		fprintf(stderr, "write Error!\n");
+	} else {
+		printf("Write success. ThreadID: %d\n", meta->thread_id);
+	}*/
+
+
+	if (close(fd) == -1) {
+		fprintf(stderr, "T%d: Closing Error!\n", meta->thread_id);
+	} else {
+		printf("T%d: close success\n", meta->thread_id);
+	}
+
+	pthread_exit(NULL);
 }
