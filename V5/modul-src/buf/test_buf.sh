@@ -18,7 +18,7 @@ dmesg -c
 # zeigt die entspr. Infos aus /proc/devices an.
 cat /proc/devices
 
-cat /dev/buf & ./test_buf_helper
+cat /dev/buf & ./test_buf_helper.sh
 
 # entlädt das Modul
 rmmod $DRIVER_NAME
