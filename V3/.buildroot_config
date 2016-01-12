@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Buildroot 2015.11-git-g66ff947-dirty Configuration
+# Buildroot 2015.11-git-g9f96fdb-dirty Configuration
 #
 BR2_HAVE_DOT_CONFIG=y
 
@@ -2031,7 +2031,7 @@ BR2_PACKAGE_GESFTPSERVER=y
 #
 # -------------------------------------------------------
 #
-# BR2_PACKAGE_IPKG is not set
+BR2_PACKAGE_IPKG=y
 # BR2_PACKAGE_OPKG is not set
 # BR2_PACKAGE_RPM is not set
 
