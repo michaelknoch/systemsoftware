@@ -1,0 +1,9 @@
+Package: syso-systeminfo
+Priority: optional
+Filename: ./syso_systeminfo.ipkg
+Size: 623760
+Description: Get info about your sys
+Maintainer: john doe <john_doe@htwg-konstanz.de>
+Source: http://192.168.29.1:8000/syso/7
+Version: 0.1
+Architecture: arm

@@ -1,0 +1,4 @@
+#!/bin/sh
+
+echo "hallo $PKG_ROOT"
+ls $PKG_ROOT
