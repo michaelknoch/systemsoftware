@@ -15,6 +15,7 @@ endef
 define BUF_INSTALL_TARGET_CMDS
 	$(MAKE) $(LINUX_MAKE_FLAGS) -C $(LINUX_DIR) M=$(@D) modules_install
 	$(INSTALL) -m 0755 -D $(@D)/test_$(BUF_NAME).sh $(TARGET_DIR)/usr/bin/test_$(BUF_NAME).sh
+	$(INSTALL) -m 0755 -D $(@D)/test_$(BUF_NAME)_helper.sh $(TARGET_DIR)/usr/bin/test_$(BUF_NAME)_helper.sh
 endef
 
 define BUF_CLEAN_CMDS
