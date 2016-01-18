@@ -3,6 +3,7 @@ Wie könnte ein Update-Mechanismus aussehen, der das installierte Paket auf aktu
 * Intervallgesteuerter Check: Paketmanager frägt regelmäßig nach Updates
 
 Wie können Sie die Menge der übertragenen Daten, trotz gleichbleibender Funktionalität, reduzieren?
+* Versioncheck: Gibt es überhaupt was neues? Nicht pauschal drüberbügeln
 * Übertragung von Deltas (Patches) abhängig der aktuellen Versionsnummer
 * Paket zur Übertragung komprimieren
 
