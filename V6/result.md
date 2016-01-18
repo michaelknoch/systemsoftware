@@ -3,5 +3,7 @@ Wie könnte ein Update-Mechanismus aussehen, der das installierte Paket auf aktu
 Wie können Sie die Menge der übertragenen Daten, trotz gleichbleibender Funktionalität, reduzieren?
 
 Welche Vorteile bietet so ein Paketverwaltungssystem im Vergleich zur manuellen Softwareinstallation?
+* Auflösen von Abhängigkeiten
+* Auflösung von Quellen: Wo befindet sich ein Package?
 
 Wie können Sie sicherstellen, dass das richtige Softwarepaket installiert wurde und nicht infizierte Schadsoftware eingeschleust wurde? (z.b Übertragung etc.)
