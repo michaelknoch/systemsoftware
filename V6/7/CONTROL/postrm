@@ -1,0 +1,14 @@
+#!/bin/sh
+
+echo "Removing Systeminfo, this may take hours...\n"
+sleep 1
+echo "..."
+sleep 1
+echo "..."
+sleep 1
+echo "..."
+sleep 1
+echo "..."
+sleep 1
+rm -rf /etc/init.d/S99systeminfo
+echo "Removing Systeminfo succeed\n"

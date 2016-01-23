@@ -1,5 +1,20 @@
+Wie könnte ein Update-Mechanismus aussehen, der das installierte Paket auf aktuellem Stand hält?
+* Manuell: User führt Update manuell durch
+* Intervallgesteuerter Check: Paketmanager frägt regelmäßig nach Updates
 
-  ### Wie könnte ein Update-Mechanismus aussehen, der das installierte Paket auf aktuellem Stand hält?
-  ### Wie können Sie die Menge der übertragenen Daten, trotz gleichbleibender Funktionalität, reduzieren?
-  ### Welche Vorteile bietet so ein Paketverwaltungssystem im Vergleich zur manuellen Softwareinstallation?
-  ### Wie können Sie sicherstellen, dass das richtige Softwarepaket installiert wurde und nicht infizierte Schadsoftware eingeschleust wurde? (z.b Übertragung etc.)
+Wie können Sie die Menge der übertragenen Daten, trotz gleichbleibender Funktionalität, reduzieren?
+* Versioncheck: Gibt es überhaupt was neues? Nicht pauschal drüberbügeln
+* Übertragung von Deltas (Patches) abhängig der aktuellen Versionsnummer
+* Paket zur Übertragung komprimieren
+
+Welche Vorteile bietet so ein Paketverwaltungssystem im Vergleich zur manuellen Softwareinstallation?
+* Auflösen von Abhängigkeiten
+* Auflösen von Quellen: Wo befindet sich ein Package?
+* Sauberes Aufräumen bei Deinstallation
+* Einfache Versionierung
+* Einheitlicher Installationsprozess
+* Einfache Suche bei einheitlichem Paketindex möglich
+
+Wie können Sie sicherstellen, dass das richtige Softwarepaket installiert wurde und nicht infizierte Schadsoftware eingeschleust wurde? (z.b Übertragung etc.)
+* Bewusst installieren, nichts blöd kopieren ;)
+* Quellen prüfen

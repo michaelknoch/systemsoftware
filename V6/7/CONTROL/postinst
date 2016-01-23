@@ -1,4 +1,16 @@
 #!/bin/sh
 
-echo "hallo $PKG_ROOT"
-ls $PKG_ROOT
+echo "Installing Systeminfo, this may take hours...\n"
+sleep 1
+echo "..."
+sleep 1
+echo "..."
+sleep 1
+echo "..."
+sleep 1
+echo "..."
+sleep 1
+cp start.sh /etc/init.d/S99systeminfo
+echo "Installing Systeminfo succeed, running for the first time\n"
+sleep 1
+/etc/init.d/S99systeminfo

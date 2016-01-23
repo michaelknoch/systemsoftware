@@ -59,6 +59,10 @@ def initFs():
 	os.makedirs('initfs/usr/bin')
 	os.makedirs('initfs/usr/share/udhcp')
 	os.system('cp init.sh initfs/etc/init.d/S01init')
+
+	os.system('cp ipkg.conf initfs/etc/ipkg.conf')
+
+
 	os.system('cp sysinfo initfs/bin/sysinfo')
 
 	#os.system('touch initfs/var/log/kern.log')
