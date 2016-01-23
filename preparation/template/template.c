@@ -13,7 +13,7 @@ static int driver_release(struct inode *geraetedatei, struct file *instanz);
 static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_t *offset);
 static ssize_t driver_write(struct file *instanz, const char *user, size_t count, loff_t *offset);
 
-// 	map file operations to functions
+// map file operations to functions
 static struct file_operations fops = {
     .read = driver_read,
     .owner= THIS_MODULE,
