@@ -93,8 +93,8 @@ static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_
 {
 	char* string = "hey\n";
 	printk("Read from Minor %d\n", iminor(instanz->f_path.dentry->d_inode));
-	copy_to_user(user, string, sizeof(string));
-	return 0;
+	copy_to_user(user, string, strlen(string)+1);
+	return strlen(string)+1;
 }
 
 static ssize_t driver_write(struct file *instanz, const char *user, size_t count, loff_t *offset)
