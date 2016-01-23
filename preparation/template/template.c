@@ -31,18 +31,17 @@ static int __init ModInit(void)
 {
 	int major;
 
-	/* 	alloc_chrdev_region
-		Die Gerätenummer wird mit den ZUgriffsfunmtionen des Treibers verknüpft
-		Arguments:	dev: 		output parameter for first assigned number
-					baseminor: 	first of the requested range of minor numbers
-					count: 		the number of minor numbers required
-					name: 		the name of the associated device or driver
-		Description: 	Allocates a range of char device numbers. 
-						The major number will be chosen dynamically, 
-						and returned (along with the first minor number) in dev. 
-						returns zero or a negative error code.
-
-	*/
+	 /*    alloc_chrdev_region
+        Die Gerätenummer wird mit den ZUgriffsfunmtionen des Treibers verknüpft
+        Arguments:  dev:       output parameter for first assigned number
+                    baseminor: first of the requested range of minor numbers
+                    count:     the number of minor numbers required
+                    name:      the name of the associated device or driver
+        Description:  Allocates a range of char device numbers. 
+                        The major number will be chosen dynamically, 
+                        and returned (along with the first minor number) in dev. 
+                        returns zero or a negative error code.
+    */
 	if( alloc_chrdev_region( &device_number, 0, MINORS_COUNT, DRIVER_NAME ) < 0) {
 		printk("Devicenumber 0x%x not available ...\n", device_number );
 		return -EIO;
