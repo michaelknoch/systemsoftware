@@ -4,17 +4,26 @@
 #include <linux/device.h>
 #include <asm/uaccess.h>
 
+// define drivername and amount of minors
 #define DRIVER_NAME "template"
 #define MINORS_COUNT 1
 
+static int driver_open(struct inode *geraetedatei, struct file *instanz); 
+static int driver_release(struct inode *geraetedatei, struct file *instanz); 
+static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_t *offset);
+static ssize_t driver_write(struct file *instanz, const char *user, size_t count, loff_t *offset);
+
 static struct file_operations fops = {
+	.read = driver_read,
     .owner=THIS_MODULE,
+    .open = driver_open,
+    .release = driver_release,
+    .write = driver_write,
 };
 
 static struct cdev *driver_object;
 static dev_t device_number;
 static struct class *template_class;
-
 
 // starting point (insmod)
 static int __init ModInit(void)
@@ -71,6 +80,30 @@ free_cdev:
 free_device_number:
 	unregister_chrdev_region( device_number, MINORS_COUNT );
 	return -EIO;
+}
+
+static int driver_open(struct inode *geraetedatei, struct file *instanz) 
+{
+	printk("Open from Minor %d", iminor(geraetedatei));
+	return 0;
+}
+
+static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_t *offset) 
+{
+	printk("Read from Minor %d", iminor(instanz->f_path.dentry->d_inode));
+	return 0;
+}
+
+static ssize_t driver_write(struct file *instanz, const char *user, size_t count, loff_t *offset)
+{
+	printk("Write to Minor %d", iminor(instanz->f_path.dentry->d_inode));
+	return 0;
+}
+
+static int driver_release(struct inode *geraetedatei, struct file *instanz) 
+{
+	printk("Release from Minor %d", iminor(geraetedatei));
+	return 0;
 }
 
 // ending point (rmmod)
