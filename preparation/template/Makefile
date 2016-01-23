@@ -6,7 +6,7 @@ export KDIR=../../V3/buildroot/output/build/linux-4.2.3
 NAME=template
 SOURCES=$(NAME).c
 OBJECTS=$(SOURCES:.c=.o)
-TARGET_DIR=/usr/bin
+TARGET_DIR=/usr/bin/
 
 ifneq ($(KERNELRELEASE),)
 obj-m	:= $(OBJECTS)

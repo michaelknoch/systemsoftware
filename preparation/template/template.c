@@ -13,9 +13,10 @@ static int driver_release(struct inode *geraetedatei, struct file *instanz);
 static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_t *offset);
 static ssize_t driver_write(struct file *instanz, const char *user, size_t count, loff_t *offset);
 
+// 	map file operations to functions
 static struct file_operations fops = {
 	.read = driver_read,
-    .owner=THIS_MODULE,
+    .owner= THIS_MODULE,
     .open = driver_open,
     .release = driver_release,
     .write = driver_write,
@@ -84,13 +85,15 @@ free_device_number:
 
 static int driver_open(struct inode *geraetedatei, struct file *instanz) 
 {
-	printk("Open from Minor %d", iminor(geraetedatei));
+	printk("Open from Minor %d\n", iminor(geraetedatei));
 	return 0;
 }
 
 static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_t *offset) 
 {
-	printk("Read from Minor %d", iminor(instanz->f_path.dentry->d_inode));
+	char* string = "hey\n";
+	printk("Read from Minor %d\n", iminor(instanz->f_path.dentry->d_inode));
+	copy_to_user(user, string, sizeof(string));
 	return 0;
 }
 
