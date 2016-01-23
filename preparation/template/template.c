@@ -1,9 +1,8 @@
-#include <linux/init.h>
 #include <linux/module.h>
 #include <linux/fs.h>
-#include <linux/version.h>
 #include <linux/cdev.h>
 #include <linux/device.h>
+#include <asm/uaccess.h>
 
 #define DRIVER_NAME "template"
 #define MINORS_COUNT 1
@@ -17,7 +16,7 @@ static dev_t device_number;
 static struct class *template_class;
 
 
-// starting point
+// starting point (insmod)
 static int __init ModInit(void)
 {
 	int major;
@@ -36,7 +35,7 @@ static int __init ModInit(void)
 	*/
 	if( alloc_chrdev_region( &device_number, 0, MINORS_COUNT, DRIVER_NAME ) < 0) {
 		printk("Devicenumber 0x%x not available ...\n", device_number );
-		return -EI0;
+		return -EIO;
 	}
 
 	/* get some memory for cdev driver structure */
@@ -71,9 +70,10 @@ free_cdev:
 	
 free_device_number:
 	unregister_chrdev_region( device_number, MINORS_COUNT );
-	return -1;
+	return -EIO;
 }
 
+// ending point (rmmod)
 static void __exit ModExit(void)
 {
 
@@ -89,11 +89,11 @@ static void __exit ModExit(void)
 	
 }
 
-// define starting and ending points
+// starting and ending points for insmod and rmmod
 module_init(ModInit);
 module_exit(ModExit);
 
-// Metainformation
+// meta
 MODULE_AUTHOR("Timo Weiß und Michael Knoch");
 MODULE_LICENSE("GPL");
 MODULE_DESCRIPTION("Just a Modul-Template, without specific functionality.");

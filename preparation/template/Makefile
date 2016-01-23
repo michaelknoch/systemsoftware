@@ -1,7 +1,7 @@
 
 export ARCH=arm
 export CROSS_COMPILE=/group/SYSO_WS1516/armv6j-rpi-linux-gnueabihf/bin/armv6j-rpi-linux-gnueabihf-
-export KDIR=../../../V3/buildroot/output/build/linux-4.2.3
+export KDIR=../../V3/buildroot/output/build/linux-4.2.3
 
 NAME=template
 SOURCES=$(NAME).c
