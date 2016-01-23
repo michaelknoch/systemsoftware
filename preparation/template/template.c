@@ -32,7 +32,6 @@ static int __init ModInit(void)
 	int major;
 
 	 /* alloc_chrdev_region
-        Die Gerätenummer wird mit den ZUgriffsfunmtionen des Treibers verknüpft
         Arguments:  dev:       output parameter for first assigned number
                     baseminor: first of the requested range of minor numbers
                     count:     the number of minor numbers required
