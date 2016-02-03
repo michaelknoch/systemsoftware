@@ -3,13 +3,13 @@
 #include <linux/workqueue.h>
 
 static struct workqueue_struct *wq;
-static void inc_count(struct work_struct*);
-static DECLARE_WORK( work_obj, inc_count);
+static void work_to_do(struct work_struct*);
+static DECLARE_WORK( work_obj, work_to_do);
 static DECLARE_COMPLETION(on_exit);
 
 static atomic_t stop_timer = ATOMIC_INIT(0);
 
-static void inc_count(struct work_struct *work)
+static void work_to_do(struct work_struct *work)
 {
 	msleep(2000);
 
