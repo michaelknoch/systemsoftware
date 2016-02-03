@@ -13,6 +13,8 @@ static DECLARE_COMPLETION(on_exit);
 static atomic_t stop_timer = ATOMIC_INIT(0);
 
 static void work_to_do(struct work_struct *work) {
+	
+	// kernelkontext --> allowed to sleep
 	msleep(2000);
 
 	if (atomic_read(&stop_timer)) {
