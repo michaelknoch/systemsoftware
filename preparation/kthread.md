@@ -1,4 +1,4 @@
-```
+``` c
 
 // ...
 #include <linux/completion.h>
