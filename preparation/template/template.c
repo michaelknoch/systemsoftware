@@ -110,7 +110,6 @@ static int driver_release(struct inode *geraetedatei, struct file *instanz)
 // ending point (rmmod)
 static void __exit ModExit(void)
 {
-
 	device_destroy(template_class, device_number);
 	class_destroy(template_class);
 
@@ -120,7 +119,6 @@ static void __exit ModExit(void)
 	unregister_chrdev_region( device_number, 1 );
 	
 	printk("exiting\n");
-	
 }
 
 // starting and ending points for insmod and rmmod
