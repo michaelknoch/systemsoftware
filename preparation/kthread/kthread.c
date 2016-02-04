@@ -9,13 +9,12 @@ static struct task_struct* thread_id;
 static wait_queue_head_t wq;
 static DECLARE_COMPLETION(on_exit);
 
-
 static int thread_code( void *data ) {
     unsigned long timeout;
 
-    allow_signal( SIGTERM ); 
+    allow_signal(SIGTERM); 
     while(!signal_pending(current)) {
-        timeout= 2 * HZ; // wait 1 second
+        timeout= 2 * HZ;
         timeout=wait_event_interruptible_timeout(
             wq, (timeout==0), timeout);
         printk("thread_code: woke up after 2 secs ...\n");
