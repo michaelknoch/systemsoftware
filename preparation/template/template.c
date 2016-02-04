@@ -40,7 +40,7 @@ static int __init ModInit(void) {
                         The major number will be chosen dynamically, 
                         and returned (along with the first minor number) in dev. 
                         returns zero or a negative error code. */
-	if( alloc_chrdev_region( &device_number, 0, MINORS_COUNT, DRIVER_NAME ) < 0) {
+	if( alloc_chrdev_region(&device_number, 0, MINORS_COUNT, DRIVER_NAME) < 0) {
 		printk("Devicenumber 0x%x not available ...\n", device_number );
 		return -EIO;
 	}
@@ -68,7 +68,6 @@ static int __init ModInit(void) {
 
 	major = MAJOR(device_number);
 	printk("Major number: %d\n", major);
-
 	return 0;
 	
 free_cdev:
