@@ -2,8 +2,9 @@
 #!/bin/sh
 
 DRIVER_NAME=template
-DRIVER_PATH=/lib/modules/4.2.3/extra
+DRIVER_PATH=/usr/bin
 
+# clear dmesg
 dmesg -c > /dev/null
 
 # zeigt die Informationen Ihres Moduls mit modinfo
@@ -18,6 +19,10 @@ dmesg -c
 # zeigt die entspr. Infos aus /proc/devices an.
 cat /proc/devices
 
+# create device
+mknod -m 622 /dev/myzerominor c 243 0
+# (gerätepfad / characterdevice / major (steht in proc/devices) / minor)
+# entfällt bei aktivierung von udev
 
 # entlädt das Modul
 rmmod $DRIVER_NAME
