@@ -32,7 +32,7 @@
 	* wie put_user nur ohne Verifikation
 	
 
-### <linux/timer.h>
+### linux/timer.h
 
 ```
 struct timer_list {
@@ -90,6 +90,18 @@ Mutexe und Semaphore stehen nur im Prozess- oder User-Kontext zur Verfügung.
 * int **atomic_dec_and_test**(atomic_t *v);
 
 Test-Funktionen geben für »v« ungleich »0« den Wert »0« zurück, ansonsten true.
+
+
+### asm/atomic.h
+
+* atomic_t index = ATOMIC_INIT(0);
+* int **atomic_read**(atomic_t *v);
+* void **atomic_set**(atomic_t *v, int i);
+* void **atomic_add**(int i, atomic_t *v);	void **atomic_sub**(int i, atomic_t *v);
+* void **atomic_inc**(atomic_t *v); void **atomic_dec**(atomic_t *v);
+* int **atomic_inc_and_test**(atomic_t *v); void **atomic_dec_and_test**(atomic_t *v); return 1 wenn v nach inc/dec 0 ist, ansonsten 0
+* int **atomic_add_negative**(int i, atomic_t *v); return 1 wenn v nach add i >= 0 ist, ansonsten 0 (v noch negativ)
+
 
 
 ### linux/interrupt.h
