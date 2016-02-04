@@ -1,5 +1,3 @@
-``` c
-
 // ...
 #include <linux/completion.h>
 #include <linux/sched.h>
@@ -58,4 +56,3 @@ static void __exit ModExit(void) {
 
 // ...
 
-```
