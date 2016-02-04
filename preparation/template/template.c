@@ -28,8 +28,7 @@ static dev_t device_number;
 static struct class *template_class;
 
 // starting point (insmod)
-static int __init ModInit(void)
-{
+static int __init ModInit(void) {
 	int major;
 
 	 /* alloc_chrdev_region
@@ -81,35 +80,30 @@ free_device_number:
 	return -EIO;
 }
 
-static int driver_open(struct inode *geraetedatei, struct file *instanz) 
-{
+static int driver_open(struct inode *geraetedatei, struct file *instanz) {
 	printk("Open from Minor %d\n", iminor(geraetedatei));
 	return 0;
 }
 
-static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_t *offset) 
-{
+static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_t *offset) {
 	char* string = "hey\n";
 	printk("Read from Minor %d\n", iminor(instanz->f_path.dentry->d_inode));
 	copy_to_user(user, string, strlen(string)+1);
 	return strlen(string)+1;
 }
 
-static ssize_t driver_write(struct file *instanz, const char *user, size_t count, loff_t *offset)
-{
+static ssize_t driver_write(struct file *instanz, const char *user, size_t count, loff_t *offset) {
 	printk("Write to Minor %d", iminor(instanz->f_path.dentry->d_inode));
 	return 0;
 }
 
-static int driver_release(struct inode *geraetedatei, struct file *instanz) 
-{
+static int driver_release(struct inode *geraetedatei, struct file *instanz) {
 	printk("Release from Minor %d", iminor(geraetedatei));
 	return 0;
 }
 
 // ending point (rmmod)
-static void __exit ModExit(void)
-{
+static void __exit ModExit(void) {
 	device_destroy(template_class, device_number);
 	class_destroy(template_class);
 
