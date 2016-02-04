@@ -1,18 +1,19 @@
 # Headers
 
-### <linux/init.h>
+### linux/init.h
+
 
 * **module_init**(name);
 	* Wenn Modul als built-in Treiber Compiler wird, wird die init fn beim booten aufgerufen.
 * **module_exit**(name);
 
-### <linux/module.h>
+### linux/module.h
 
 * **MODULE_LICENSE**(lizenz);
 * **MODULE_PARM_DESC**(var, desc);
 	* ordnet `var` eine Beschreibung `desc` für modinfo 
 
-### <asm/uaccess.h>
+### asm/uaccess.h
 
 * unsigned long **copy_from_user**(void *to, const void *from, unsigned long bytes_to_copy);
 	* returns #Zeichen, die nicht kopiert wurden.  
@@ -54,7 +55,7 @@ struct timer_list {
 * **mod_timer**(struct timer_list *timer, unsigned long expires);
 	* um `expires` up-zu-daten
 
-### <asm/signal.h>
+### asm/signal.h
 
 * **SA_INTERRUPT**
 	* Interrupt gesperrt 
@@ -63,7 +64,7 @@ struct timer_list {
 * **SA_SAMPLE_RANDOM**
 	* Ist dieses Bit gesetzt, wird der Auftrittszeitpunkt des Interrupts zur Erzeugung von Zufallszahlen herangezogen.
 	
-### <asm/semaphore.h>
+### asm/semaphore.h
 
 Mutexe und Semaphore stehen nur im Prozess- oder User-Kontext zur Verfügung.
 
@@ -74,7 +75,7 @@ Mutexe und Semaphore stehen nur im Prozess- oder User-Kontext zur Verfügung.
 * void **DECLARE_MUTEX_LOCKED**(name);
 	* locked den Mutex sofort
 
-### <linux/interrupt.h>
+### linux/interrupt.h
 
 * request_irq
 * free_irq
