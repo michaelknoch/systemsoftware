@@ -2,7 +2,6 @@
 
 ### linux/init.h
 
-
 * **module_init**(name);
 	* Wenn Modul als built-in Treiber Compiler wird, wird die init fn beim booten aufgerufen.
 * **module_exit**(name);
@@ -74,6 +73,24 @@ Mutexe und Semaphore stehen nur im Prozess- oder User-Kontext zur Verfügung.
 * void **DECLARE_MUTEX**(name);
 * void **DECLARE_MUTEX_LOCKED**(name);
 	* locked den Mutex sofort
+	
+### asm/atomic.h
+
+* atomic_t index = **ATOMIC_INIT**(0);
+	* atomare variable `index` mit `0` initialisieren
+* int **atomic_read**(atomic_t *v); 
+* void **atomic_set**(atomic_t *v, int i);
+* void **atomic_sub**(int i, atomic_t *v);
+* int **atomic_sub_and_test**(int i, atomic_t *v);
+* void **atomic_add**(int i, atomic_t *v);
+* int **atomic_add_and_test**(int i, atomic_t *v);
+* void **atomic_inc**(atomic_t *v);
+* int **atomic_inc_and_test**(atomic_t *v);
+* void **atomic_dec**(atomic_t *v);
+* int **atomic_dec_and_test**(atomic_t *v);
+
+Test-Funktionen geben für »v« ungleich »0« den Wert »0« zurück, ansonsten true.
+
 
 ### linux/interrupt.h
 
