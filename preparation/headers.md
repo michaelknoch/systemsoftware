@@ -73,6 +73,21 @@ Mutexe und Semaphore stehen nur im Prozess- oder User-Kontext zur Verfügung.
 * void **DECLARE_MUTEX**(name);
 * void **DECLARE_MUTEX_LOCKED**(name);
 	* locked den Mutex sofort
+	
+### linux/rwsem.h
+
+Wenn man nur schreibenden Zugriff schützen will (lesen immer erlaubt), kann ein read/write semaphore verwendet werden:
+
+* void **init_rwsem**(struct rw_semaphore *rwsema);
+* void **down_read**(struct rw_semaphore *rwsema);
+	* beim betreten zum lesen (kein lock)
+* void **down_write**(struct rw_semaphore *rwsema);
+	* beim betreten zum schreiben (lock) 
+* void **up_read**(struct rw_semaphore *sem);
+* void **up_write**(struct rw_semaphore *sem); 
+* int **down_read_trylock**(struct rw_semaphore *rw_sema);
+	* return 1 bei Erfolg, sonst 0
+* int **down_write_trylock**(struct rw_semaphore *sem);  
 
 ### asm/atomic.h
 
