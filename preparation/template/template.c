@@ -40,14 +40,14 @@ static int __init ModInit(void) {
                         The major number will be chosen dynamically, 
                         and returned (along with the first minor number) in dev. 
                         returns zero or a negative error code. */
-	if( alloc_chrdev_region(&device_number, 0, MINORS_COUNT, DRIVER_NAME) < 0) {
+	if(alloc_chrdev_region(&device_number, 0, MINORS_COUNT, DRIVER_NAME) < 0) {
 		printk("Devicenumber 0x%x not available ...\n", device_number );
 		return -EIO;
 	}
 
 	/* get some memory for cdev driver structure */
 	driver_object = cdev_alloc();
-	if( driver_object==NULL ) {
+	if(driver_object == NULL) {
 		printk("cdev_alloc failed ...\n");
 		goto free_device_number;
 	}
