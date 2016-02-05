@@ -8,8 +8,7 @@ static void tasklet_func(unsigned long data) {
 // 0L = Unsigned Long Data
 DECLARE_TASKLET(tasklet_struct, tasklet_func, 0L);
 
-static int __init ModInit(void)
-{
+static int __init ModInit(void) {
     //...
     
     /*  übergibt tasklet_struct zur Abarbeitung an den Kernel
@@ -30,9 +29,7 @@ static int __init ModInit(void)
     return 0;
 }
 
-static void __exit ModExit(void)
-{
+static void __exit ModExit(void) {
     tasklet_kill(&tasklet_struct);
-    
     //...   
 }

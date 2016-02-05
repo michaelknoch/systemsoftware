@@ -105,12 +105,9 @@ static int driver_release(struct inode *geraetedatei, struct file *instanz) {
 static void __exit ModExit(void) {
     device_destroy(template_class, device_number);
     class_destroy(template_class);
-
     printk("trying to unregister 0x%x\n", device_number);
-    
     cdev_del( driver_object );
     unregister_chrdev_region( device_number, 1 );
-    
     printk("exiting\n");
 }
 
