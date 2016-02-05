@@ -107,6 +107,33 @@ Wenn man nur schreibenden Zugriff schützen will (lesen immer erlaubt), kann ein
 * int **atomic_sub_and_test**(int i, atomic_t *v);
 
 
+### asm/spinlock.h 
+Schutz eines „kurzen“ kritischen
+Abschnitts, aktives warten, im Prozess & Interruptkontext einsetzbar, Theoretisch nur auf Mehrprozessor, praktisch auch auf Einprozessormaschinen  
+
+* static **spinlock_t** lock = **SPIN_LOCK_UNLOCKED**;
+* static **rwlock_t** rwlock = **RW_LOCK_UNLOCKED**;
+* **spin_lock_init**(spinlock_t *lock);
+* Rettet den Zustand des Interruptflags (in iflags), sperrt Interrupts auf dem lokalen Prozessor (auch Softirqs), bei restore wird das Flag-Register mit dem Wert »iflags« restauriert  
+  	* void **spin_lock_irqsave**(spinlock_t *lock, unsigned long iflags);  
+  	* void **spin_unlock_irqrestore**(spinlock_t *lock, unsigned long iflags);
+* Einsatz wenn der Zustand des Interruptflags genau bekannt ist, sperrt die Abarbeitung von Interrupts, auch Softirqs. Die Interrupt-Flags werden nicht gesichert  
+  	* void **spin_lock_irq**(spinlock_t *lock);  
+  	* void **spin_unlock_irq**(spinlock_t *lock);
+* Lässt Hardwareinterrupts zu, sperrt aber Softirqs
+	* void **spin_lock_bh**(spinlock_t *lock);
+	* void **spin_unlock_bh**(spinlock_t *lock);
+* Nur im Prozess-Kontext (Treiberinstanzen, Kernel-Threads, Workqueues, Event-Workqueue)
+	*  void **spin_lock**(spinlock_t *lock);  
+	*  void **spin_unlock**(spinlock_t *lock);
+* Für rw locks read/write prefix anstatt spin Bsp:  
+	* void **read_lock_irq**(rwlock_t *lock);
+	* void **write_lock_irq**(rwlock_t *lock);  
+	
+![Spinlock table](https://ezs.kr.hsnr.de//TreiberBuch/html/mutextable.png)
+
+
+
 ### linux/interrupt.h
 
 * request_irq
