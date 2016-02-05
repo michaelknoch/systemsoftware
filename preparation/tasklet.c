@@ -13,7 +13,15 @@ static int __init ModInit(void)
 	//...
 	
 	/* 	übergibt tasklet_struct zur Abarbeitung an den Kernel
-		Wird direkt nach ISR gefeuert (sofern keine anderen Tasklets warten) */
+		Wird NICHT direkt nach ISR gefeuert, erst kommen dran:
+		1. HI_SOFTIRQ
+		2. TIMER_SOFTIRQ
+		3. NET_TX_SOFTIRQ
+		4. NET_RX_SOFTIRQ
+		5. SCSI_SOFTIRQ
+		6. >> TASKLET_SOFTIRQ <<
+		Um direkt nach ISR ausgeführt zu werden muss tasklet_hi_schedule(&tasklet_struct) verwendet werden
+	*/
 	tasklet_schedule(&tasklet_struct);
 
 	/* 	Alternative für mehr prio
