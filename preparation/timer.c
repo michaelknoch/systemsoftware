@@ -24,36 +24,36 @@ static void inc_count(unsigned long arg)
 
 static int __init ModInit(void)
 {
-	// ...
-	
-	// Initialisierung der struct timer_list
-	init_timer( &mytimer );
+    // ...
+    
+    // Initialisierung der struct timer_list
+    init_timer( &mytimer );
     mytimer.function = inc_count;
     mytimer.data = 0;
     mytimer.expires = jiffies + (2*HZ); // 2 second
-	add_timer(&mytimer);
-	
-	/* optional: mod_timer(&mytimer, jiffies)
-	   um bereits aktivierten timer zu modifizieren
-	    */
-	return 0;
-}
+    add_timer(&mytimer);
+    
+    /* optional: mod_timer(&mytimer, jiffies)
+       um bereits aktivierten timer zu modifizieren
+        */
+       return 0;
+    }
 
-static void __exit ModExit(void)
-{
+    static void __exit ModExit(void)
+    {
 
-	// ...
+    // ...
 
-	if( timer_pending( &mytimer ) ) {
-	    printk("Timer ist aktiviert ...\n");
-	}
-	if( del_timer_sync( &mytimer ) ) {
-    	printk("Aktiver Timer deaktiviert\n");
-	}
-	else {
-        printk("Kein Timer aktiv\n");
-	}
+        if( timer_pending( &mytimer ) ) {
+            printk("Timer ist aktiviert ...\n");
+        }
+        if( del_timer_sync( &mytimer ) ) {
+            printk("Aktiver Timer deaktiviert\n");
+        }
+        else {
+            printk("Kein Timer aktiv\n");
+        }
 
-	// ...
+    // ...
 
-}
+    }
