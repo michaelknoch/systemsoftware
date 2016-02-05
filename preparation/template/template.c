@@ -29,9 +29,9 @@ static struct class *template_class;
 
 // starting point (insmod)
 static int __init ModInit(void) {
-	int major;
+    int major;
 
-	 /* alloc_chrdev_region
+     /* alloc_chrdev_region
         Arguments:  dev:       output parameter for first assigned number
                     baseminor: first of the requested range of minor numbers
                     count:     the number of minor numbers required
@@ -40,78 +40,75 @@ static int __init ModInit(void) {
                         The major number will be chosen dynamically, 
                         and returned (along with the first minor number) in dev. 
                         returns zero or a negative error code. */
-	if(alloc_chrdev_region(&device_number, 0, MINORS_COUNT, DRIVER_NAME) < 0) {
-		printk("Devicenumber 0x%x not available ...\n", device_number );
-		return -EIO;
-	}
+    if(alloc_chrdev_region(&device_number, 0, MINORS_COUNT, DRIVER_NAME) < 0) {
+        printk("Devicenumber 0x%x not available ...\n", device_number );
+        return -EIO;
+    }
 
-	/* get some memory for cdev driver structure */
-	driver_object = cdev_alloc();
-	if(driver_object == NULL) {
-		printk("cdev_alloc failed ...\n");
-		goto free_device_number;
-	}
+    /* get some memory for cdev driver structure */
+    driver_object = cdev_alloc();
+    if(driver_object == NULL) {
+        printk("cdev_alloc failed ...\n");
+        goto free_device_number;
+    }
 
-	driver_object->ops = &fops;
-	driver_object->owner = THIS_MODULE;
+    driver_object->ops = &fops;
+    driver_object->owner = THIS_MODULE;
 
-	/* Anmeldung beim Kernel */
-	if( cdev_add( driver_object, device_number, MINORS_COUNT )) {
-		printk("cdev_add failed ...\n");
-		goto free_cdev;
-	}
+    /* Anmeldung beim Kernel */
+    if( cdev_add( driver_object, device_number, MINORS_COUNT )) {
+        printk("cdev_add failed ...\n");
+        goto free_cdev;
+    }
 
-	/* Eintrag im Sysfs*/
-	template_class = class_create(THIS_MODULE, DRIVER_NAME);
-	/* Erzeugung der Gerätedatei mittels sysfs eintrag */
-	device_create(template_class, NULL, device_number, NULL, "%s", DRIVER_NAME);
+    /* Eintrag im Sysfs*/
+    template_class = class_create(THIS_MODULE, DRIVER_NAME);
+    /* Erzeugung der Gerätedatei mittels sysfs eintrag */
+    device_create(template_class, NULL, device_number, NULL, "%s", DRIVER_NAME);
 
-	major = MAJOR(device_number);
-	printk("Major number: %d\n", major);
-	return 0;
-	
+    major = MAJOR(device_number);
+    printk("Major number: %d\n", major);
+    return 0;
+    
 free_cdev:
-	kobject_put(&driver_object->kobj);
-	driver_object = NULL;
-	
+    kobject_put(&driver_object->kobj);
+    driver_object = NULL;
+    
 free_device_number:
-	unregister_chrdev_region( device_number, MINORS_COUNT );
-	return -EIO;
+    unregister_chrdev_region( device_number, MINORS_COUNT );
+    return -EIO;
 }
 
 static int driver_open(struct inode *geraetedatei, struct file *instanz) {
-	printk("Open from Minor %d\n", iminor(geraetedatei));
-	return 0;
+    printk("Open from Minor %d\n", iminor(geraetedatei));
+    return 0;
 }
 
 static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_t *offset) {
-	char* string = "hey\n";
-	printk("Read from Minor %d\n", iminor(instanz->f_path.dentry->d_inode));
-	copy_to_user(user, string, strlen(string)+1);
-	return strlen(string)+1;
+    char* string = "hey\n";
+    printk("Read from Minor %d\n", iminor(instanz->f_path.dentry->d_inode));
+    copy_to_user(user, string, strlen(string)+1);
+    return strlen(string)+1;
 }
 
 static ssize_t driver_write(struct file *instanz, const char *user, size_t count, loff_t *offset) {
-	printk("Write to Minor %d", iminor(instanz->f_path.dentry->d_inode));
-	return 0;
+    printk("Write to Minor %d", iminor(instanz->f_path.dentry->d_inode));
+    return 0;
 }
 
 static int driver_release(struct inode *geraetedatei, struct file *instanz) {
-	printk("Release from Minor %d", iminor(geraetedatei));
-	return 0;
+    printk("Release from Minor %d", iminor(geraetedatei));
+    return 0;
 }
 
 // ending point (rmmod)
 static void __exit ModExit(void) {
-	device_destroy(template_class, device_number);
-	class_destroy(template_class);
-
-	printk("trying to unregister 0x%x\n", device_number);
-	
-	cdev_del( driver_object );
-	unregister_chrdev_region( device_number, 1 );
-	
-	printk("exiting\n");
+    device_destroy(template_class, device_number);
+    class_destroy(template_class);
+    printk("trying to unregister 0x%x\n", device_number);
+    cdev_del( driver_object );
+    unregister_chrdev_region( device_number, 1 );
+    printk("exiting\n");
 }
 
 // starting and ending points for insmod and rmmod
