@@ -136,15 +136,15 @@ Abschnitts, aktives warten, im Prozess & Interruptkontext einsetzbar, Theoretisc
 
 ### linux/interrupt.h
 
-* request_irq
-* free_irq
-* tasklet_disable
-* tasklet_enable
-* tasklet_hi_schedule
-* tasklet_init
-* tasklet_kill
-* tasklet_schedule
-* probe_irq_on
-* probe_irq_off
-* DECLARE_TASKLET
-* DECLARE_TASKLET_DISABLED
+* int **request_irq**(unsigned int irq, irqreturn_t (*handler)(int,void*,struct pt_regs*) , unsigned long flags, const char devname, void *dev_id);
+* void **free_irq**(unsigned int irq, void *dev_id);
+* void **tasklet_disable**(struct tasklet_struct *t);
+* void **tasklet_enable**(struct tasklet_struct *t);
+* void **tasklet_hi_schedule**(struct tasklet_struct *t);
+* void **tasklet_init**(struct tasklet_struct *t, void (*func)(unsigned long), unsigned long data);
+* void **tasklet_kill**(struct tasklet_struct *t);
+* void **tasklet_schedule**(struct tasklet_struct *t);
+* unsigned long **probe_irq_on**(void);
+* int **probe_irq_off**(unsigned long val);
+* **DECLARE_TASKLET**(struct tasklet_struct name, void (*func)(unsigned long), unsigned long data);
+* **DECLARE_TASKLET_DISABLED**(struct tasklet_struct name, void (*func)(unsigned long), unsigned long data);
