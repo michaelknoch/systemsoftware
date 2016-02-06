@@ -130,7 +130,7 @@ Abschnitts, aktives warten, im Prozess & Interruptkontext einsetzbar, Theoretisc
 	* void **read_lock_irq**(rwlock_t *lock);
 	* void **write_lock_irq**(rwlock_t *lock);  
 	
-![Spinlock table](https://ezs.kr.hsnr.de//TreiberBuch/html/mutextable.png)
+![Spinlock table](http://mica-design.de/mutextable.png)
 
 
 
