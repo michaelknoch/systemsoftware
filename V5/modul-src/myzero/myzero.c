@@ -45,7 +45,7 @@ static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_
 		printk("read from minor 0\n");
 		to_copy = iptr->counter;
 		to_copy =  min(to_copy, count);
-		if (to_copy > -1) {
+		if (to_copy <= 0) {
 			return 0;
 		} 
 		charpointer = minorzero;
@@ -54,7 +54,7 @@ static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_
 		printk("read from minor 1\n");
 		to_copy = iptr->counter;
 		to_copy =  min(to_copy, count);
-		if (to_copy > -1) {
+		if (to_copy <= 0) {
 			return 0;
 		} 
 		charpointer = minorone;
