@@ -12,7 +12,6 @@ static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_
 	unsigned long notcopied;
 	size_t to_copy;
 	struct _instance_data *iptr;
-	char *charpointer;
 
 	iptr = (struct _instance_data*) instanz->private_data;
 
@@ -20,14 +19,10 @@ static ssize_t driver_read(struct file *instanz, char *user, size_t count, loff_
 	to_copy =  min(to_copy, count);
 	if (to_copy <= 0) {
 		return 0;
-	} 
-	charpointer = minorone;
+	}
 	
 	notcopied = copy_to_user(user, helloWorld, to_copy);
-	iptr->counter = iptr->counter - to_copy + notcopied;
-
-	printk("not copied: %lu\n", notcopied);
-	
+	iptr->counter = iptr->counter - to_copy + notcopied;	
 	return to_copy - notcopied;
 }
 
