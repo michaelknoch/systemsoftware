@@ -137,6 +137,7 @@ Abschnitts, aktives warten, im Prozess & Interruptkontext einsetzbar, Theoretisc
 ### linux/interrupt.h
 
 * int **request_irq**(unsigned int irq, irqreturn_t (*handler)(int,void*,struct pt_regs*) , unsigned long flags, const char devname, void *dev_id);
+	* flags: SA_INTERRUPT, SA_SHIRQ, SA_SAMPLE_RANDOM (siehe asm/signal.h)
 * void **free_irq**(unsigned int irq, void *dev_id);
 * void **tasklet_disable**(struct tasklet_struct *t);
 * void **tasklet_enable**(struct tasklet_struct *t);
